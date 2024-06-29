@@ -22,7 +22,7 @@ export default function useFirestore() {
       });
       console.log(docRef.id)
       return {isError : false , id : docRef.id}
-    } catch (e) {
+    } catch (e : any ) {
       return {isError : true , error : e}
     }
   }
