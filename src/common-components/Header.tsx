@@ -13,12 +13,12 @@ const Header = () => {
     if(!authIsReady) return <></>
   return (
     user ? (
-        <header>
-            <p>Hi {user.displayName}</p>
-            <button onClick={logout} >Logout</button>
+        <header className='border-b border-neutral-200 h-16 flex items-center justify-between p-4'>
+            <h1 className='text-xl font-semibold'>TrackIt</h1>
+            <button className='hover:bg-neutral-100 transition-all duration-75 px-2 py-1 rounded-md' onClick={logout} >Logout</button>
         </header>
     ) : (
-        <header>
+        <header >
             <p>TrackIt</p>
             <button onClick={login} >Login</button>
         </header>
