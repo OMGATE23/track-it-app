@@ -53,7 +53,7 @@ export default function Calendar() {
   }
 
   return (
-    <div className="h-fit w-fit border border-neutral-200 p-4 rounded-md sticky top-4 flex flex-col items-center gap-2 ">
+    <div className="h-fit w-fit border border-neutral-100 p-4 shadow-md rounded-md sticky top-4 flex flex-col items-center gap-2 ">
       <div className="flex items-center justify-between w-full ">
         <button onClick={previousMonthHandler}>
             <img alt = "left" className="w-5" src="/assets/icons/chevronLeft.svg" />

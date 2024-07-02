@@ -11,7 +11,7 @@ const DisplayView = () => {
       <div className="flex relative flex-col gap-8 justify-center items-center">
           <Calendar />
         </div>
-    <div className="outline outline-1 outline-neutral-200 rounded-md">
+    <div className="outline outline-1 outline-neutral-100 rounded-md shadow-md">
       <WeekGrid />
     </div>
     </main>
