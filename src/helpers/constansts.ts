@@ -15,6 +15,22 @@ export const MONTHS = [
   "Dec",
 ];
 
+export const MONTHS_FULL_NAME = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
+
 export const colourOptions = [
   "bg-blue-500",
   "bg-red-500",

@@ -33,7 +33,7 @@ const TimeBox = ({
           setShowCreateTask(true);
         }}
         className={`h-4  timebox ${
-          timeInterval.end % 60 === 0 && "border-b-[1px] border-neutral-200 "
+          timeInterval.end % 60 === 0 && "border-b-[1px] border-zinc-200 "
         } relative`}
       ></div>
     </>

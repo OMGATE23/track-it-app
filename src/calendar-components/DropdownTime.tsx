@@ -23,7 +23,7 @@ export default function DropdownTime({
     <div className="flex gap-2 w-full items-center">
       <label className=" text-sm">{label}</label>
       <select
-        className="outline outline-1 outline-neutral-300 p-2 rounded-md"
+        className="outline outline-1 outline-zinc-300 p-2 rounded-md"
         value={value}
         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
           changeHandler(+event.target.value);

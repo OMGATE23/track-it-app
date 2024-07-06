@@ -59,12 +59,12 @@ const CreateEventModal = ({
     <div className="fixed top-0 left-0  z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-neutral-100 py-8 px-8"
+        className="fade-up relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
         <form className="flex flex-col items-center gap-8 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
             <input
-              className="border-b w-full py-2 focus:outline-none border-neutral-400 "
+              className="border-b w-full py-2 focus:outline-none border-zinc-400 "
               type="text"
               required
               autoFocus
@@ -82,7 +82,7 @@ const CreateEventModal = ({
             <input
               type="text"
               placeholder="Description"
-              className="border-b w-full py-2 focus:outline-none border-neutral-400"
+              className="border-b w-full py-2 focus:outline-none border-zinc-400"
               onChange={(e) => {
                 setTaskInfo((prev) => {
                   return {
@@ -141,8 +141,8 @@ const CreateEventModal = ({
               type="submit"
               className={`w-fit py-1 px-6 text-lg ${
                 taskInfo.title === ""
-                  ? "cursor-not-allowed bg-neutral-200"
-                  : "bg-neutral-800"
+                  ? "cursor-not-allowed bg-zinc-200"
+                  : "bg-zinc-800"
               } text-white rounded-md`}
               disabled={!taskInfo.title}
               onClick={(e) => {
@@ -168,7 +168,7 @@ const CreateEventModal = ({
                 e.preventDefault();
                 setShowCreateTask(false);
               }}
-              className="w-fit py-1 px-6 text-lg outline outline-1 outline-neutral-800 text-neutral-800 rounded-md"
+              className="w-fit py-1 px-6 text-lg outline outline-1 outline-zinc-800 text-zinc-800 rounded-md"
             >
               Cancel
             </button>
