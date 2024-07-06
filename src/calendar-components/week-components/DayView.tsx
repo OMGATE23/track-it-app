@@ -2,10 +2,10 @@ import { useDateContext } from "@/context/DateContext";
 import { sameDate } from "@/helpers/timefunctions";
 import React, { useEffect, useState } from "react";
 import TimeBox from "./TimeBox";
-import { Task, useTaskContext } from "@/context/TaskContext";
+import { useTaskContext } from "@/context/TaskContext";
 import { CreateTaskType } from "./WeekGrid";
 import TaskDisplay from "./TaskDisplay";
-import { MONTHS, weekDays } from "@/helpers/constansts";
+import { weekDays } from "@/helpers/constansts";
 
 export type StructuredTaskType = {
   title: string;
@@ -80,9 +80,12 @@ const DayView = ({
     return structuredTasks;
   }
   useEffect(() => {
+    
     const structuredTasks = getFormatedTasks();
     setDisplayTasks(structuredTasks || []);
   }, [tasks]);
+
+  console.log(tasks)
   return (
     <div className="min-w-32 relative border-[0.5px] border-zinc-200">
       <button
@@ -94,7 +97,7 @@ const DayView = ({
             },
           });
         }}
-        className={` w-full bg-white sticky top-0 z-[9999999999] font-[300] border-b border-zinc-200 select-none px-4 py-1 h-16 flex items-center justify-center gap-2 text-center`}
+        className={` w-full bg-white sticky top-0 z-[9999] font-[300] border-b border-zinc-200 select-none px-4 py-1 h-16 flex items-center justify-center gap-2 text-center`}
       >
         <span className={`${sameDate(day , new Date(Date.now())) ? 'bg-zinc-200' : ''} text-2xl text-zinc-900 w-10 h-10 rounded-full flex items-center justify-center`}>{day.getDate()}</span>
         <span className="text-zinc-600 font-[200]">{weekDays[day.getDay()]}</span>

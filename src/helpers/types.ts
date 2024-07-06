@@ -20,3 +20,23 @@ export type TypeDimensionAction =
   | { type: "SET_ADDED_HEIGHT"; payload: number }
   | { type: "SET_SLIDER_MOVING"; payload: boolean }
   | { type: "SET_MOUSE_UP"; payload: boolean };
+
+
+export interface Task {
+  title: string;
+  description?: string;
+  date: Date;
+  startTime: number;
+  endTime: number;
+  id: string;
+  colour: string;
+  project : string;
+  tags : string[];
+  userId : string;
+}
+
+export interface Project {
+  title : string;
+  description? : string;
+  id : string
+}

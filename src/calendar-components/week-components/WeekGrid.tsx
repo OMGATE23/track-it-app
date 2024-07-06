@@ -51,7 +51,7 @@ const WeekGrid = () => {
   let displayWeek = getDisplayWeek();
   return (
     <>
-      <div className="flex items-start max-h-[300px] overflow-y-scroll">
+      <div className="flex items-start max-h-[100%] overflow-y-scroll">
         <div className="w-32 text-xs text-zinc-700">
           <div className="h-14 py-2 px-1 flex justify-end items-end">
             GMT + {numberToTime(new Date(Date.now()).getTimezoneOffset())}

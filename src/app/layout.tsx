@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthContextProvider>
-      <DateContextProvider>
+        <DateContextProvider>
           <TaskContextProvider>
             <body className={inter.className}>{children}</body>
           </TaskContextProvider>

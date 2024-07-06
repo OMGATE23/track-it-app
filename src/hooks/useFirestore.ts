@@ -1,31 +1,90 @@
 import { db } from "../firebase/config";
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, DocumentData, DocumentReference, getDoc, getDocs, query, QuerySnapshot, updateDoc, where } from "firebase/firestore";
 import { useAuthContext } from "./useAuthContext";
-import { useContext } from "react";
+import { Task } from "@/helpers/types";
 
 export default function useFirestore() {
   const { state } = useAuthContext();
-  async function addDemo() {
-    const {user} = state
+
+  async function addTask(task: Task): Promise<{ isError: boolean; id?: string; error?: any }> {
+    const { user } = state;
+    if (!user) {
+      return {
+        isError: true,
+        error: "User not found. Log in to continue",
+      };
+    }
+  
     try {
-      if (!user) {
-        return {
-          message: "User not found. Log in to continue",
-        };
-      }
-      const docRef = await addDoc(collection(db, "demo"), {
-        name: user.displayName,
-        email: user.email,
+      const docRef: DocumentReference = await addDoc(collection(db, "tasks"), {
+        ...task,
         userId: user.uid,
-        demo : "Yes this is a demo",
-        createdAt : new Date()
       });
-      console.log(docRef.id)
-      return {isError : false , id : docRef.id}
-    } catch (e : any ) {
-      return {isError : true , error : e}
+      console.log('Task added');
+      return { isError: false, id: docRef.id };
+    } catch (error: any) {
+      console.error("Error adding task:", error);
+      return { isError: true, error };
     }
   }
 
-  return { addDemo };
-}
+   async function getAllUserTasks(): Promise<{ tasks?: Task[]; errorOccured?: boolean; error?: any }> {
+    const { user } = state;
+    if (!user) {
+      return {
+        errorOccured: true,
+        error: "User not found. Log in to continue",
+      };
+    }
+  
+    try {
+      const q = query(collection(db, "tasks"), where("userId", "==", user.uid));
+      const querySnapshot: QuerySnapshot = await getDocs(q);
+      const tasks: Task[] = [];
+      querySnapshot.forEach((doc: DocumentData) => {
+        tasks.push({ id: doc.id, ...doc.data() } as Task);
+      });
+      console.log(tasks);
+      return { tasks };
+    } catch (error: any) {
+      console.error("Error fetching tasks:", error);
+      return { errorOccured: true, error };
+    }
+  }
+
+  async function updateTask(task: Task): Promise<{ isError: boolean; error?: any }> {
+    const { user } = state;
+    if (!user) {
+      return {
+        isError: true,
+        error: "User not found. Log in to continue",
+      };
+    }
+  
+    if (!task.id) {
+      return {
+        isError: true,
+        error: "Task ID is required to update a task",
+      };
+    }
+  
+    try {
+      const taskRef = doc(db, "tasks", task.id);
+      await updateDoc(taskRef, {
+        title: task.title,
+        description: task.description,
+        date: task.date,
+        startTime: task.startTime,
+        endTime: task.endTime,
+        colour: task.colour,
+      });
+      console.log('Task updated');
+      return { isError: false };
+    } catch (error: any) {
+      console.error("Error updating task:", error);
+      return { isError: true, error };
+    }
+  }
+
+  return { addTask , getAllUserTasks , updateTask};
+};

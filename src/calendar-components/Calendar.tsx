@@ -3,8 +3,13 @@
 import { useDateContext } from "@/context/DateContext";
 import { MONTHS } from "../helpers/constansts";
 import { sameDate } from "@/helpers/timefunctions";
+import { SetStateAction } from "react";
 
-export default function Calendar() {
+interface Props {
+  setShowCalendar : React.Dispatch<SetStateAction<boolean>>
+}
+
+export default function Calendar({setShowCalendar} : Props) {
   let { state, dispatch } = useDateContext();
   let displayDate = state.displayDate;
   let days = getDatesInCurrentMonth();
@@ -53,7 +58,7 @@ export default function Calendar() {
   }
 
   return (
-    <div className="h-fit w-fit border border-zinc-100 p-4 shadow-md rounded-md sticky top-4 flex flex-col items-center gap-2 ">
+    <div className="h-fit w-fit fade-in-pop border border-zinc-100 p-4 shadow-sm rounded-md sticky top-4 flex flex-col items-center gap-2 ">
       <div className="flex items-center justify-between w-full ">
         <button onClick={previousMonthHandler}>
             <img alt = "left" className="w-5" src="/assets/icons/chevronLeft.svg" />
@@ -82,9 +87,11 @@ export default function Calendar() {
               dispatch({
                 type: "DISPLAY_DATE",
                 payload: {
-                  selectedDate: date,
+                  displayDate: date,
                 },
               });
+
+              setShowCalendar(false)
             }}
             className={`day ${
               !isSameMonth(date) && "text-gray-400"

@@ -10,7 +10,6 @@ import Sidebar from '@/common-components/Sidebar'
 
 const App  = () => {
   const {state} = useAuthContext()
-  const {addDemo} = useFirestore()
   const router = useRouter()
 
   if(!state.authIsReady){return <></>}
@@ -22,7 +21,7 @@ const App  = () => {
   return (
     <div className='h-[100vh] h-[100dvh] '>
       <Header/>
-      <div className='flex h-[100%]'>
+      <div className='flex'>
         <Sidebar/>
         <DisplayView />
       </div>

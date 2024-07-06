@@ -139,3 +139,19 @@
     font-weight : 400;
     cursor : pointer;
 }
+
+.fade-in-pop{
+  animation: fade-in-pop 200ms;
+}
+
+@keyframes fade-in-pop {
+  0%{
+    scale : 0.9;
+    opacity: 0;
+  }
+
+  100% {
+    scale : 1;
+    opacity: 1;
+  }
+}

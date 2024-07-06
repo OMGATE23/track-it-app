@@ -1,16 +1,6 @@
 "use client";
 import React, { ReactNode, createContext, useContext, useReducer } from "react";
-
-export type Task = {
-  title: string;
-  description?: string;
-  date: Date;
-  startTime: number;
-  endTime: number;
-  id: string;
-  colour: string;
-};
-
+import {Task} from '../helpers/types'
 export type TaskState = {
   tasks: Task[];
 };
@@ -103,9 +93,10 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
             description: task.description || "",
             id: taskId,
             colour: task.colour,
+            project : '',
           } as Task,
         ];
-
+        
         return {
           tasks: newtasks,
         };
