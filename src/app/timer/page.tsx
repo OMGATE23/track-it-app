@@ -1,24 +1,30 @@
 'use client'
-import Header from '@/components/Header'
+import Header from '@/common-components/Header'
+import DisplayView from '@/calendar-components/DisplayView'
 import { useAuthContext } from '@/hooks/useAuthContext'
 
 import useFirestore from '@/hooks/useFirestore'
+import { useRouter } from 'next/navigation'
 import React from 'react'
+import Sidebar from '@/common-components/Sidebar'
 
 const App  = () => {
   const {state} = useAuthContext()
-    const {addDemo} = useFirestore()
+  const router = useRouter()
 
-  if(!state.authIsReady){return <>Auth is not ready</>}
+  if(!state.authIsReady){return <></>}
 
-  if(state.authIsReady && !state.user){
-    return <>User not ready</>
+  if(!state.user){
+    router.push('/')
+    return <></>
   }
   return (
-    <div>
+    <div className='h-[100vh] h-[100dvh] '>
       <Header/>
-      App of greatness
-      <button onClick={addDemo}>Add demo</button>
+      <div className='flex'>
+        <Sidebar/>
+        <DisplayView />
+      </div>
     </div>
   )
 }
