@@ -3,9 +3,10 @@ import { CreateTaskType } from "./week-components/WeekGrid";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
 import { colourOptions } from "@/helpers/constansts";
-type CreateEventModalType = {
-  setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
-  createTaskData: CreateTaskType;
+import { Task } from "@/helpers/types";
+type UpdateEventModalType = {
+  setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
+  updateTaskData: Task;
 };
 
 type TaskInfo = {
@@ -13,21 +14,21 @@ type TaskInfo = {
   description: string;
 };
 
-const CreateEventModal = ({
-  setShowCreateTask,
-  createTaskData,
-}: CreateEventModalType) => {
+const UpdateEventModal = ({
+  setShowUpdateTask,
+  updateTaskData
+}: UpdateEventModalType) => {
   const [taskInfo, setTaskInfo] = useState<TaskInfo>({
-    title: "",
-    description: "",
+    title: updateTaskData.title,
+    description: updateTaskData.description as string,
   });
-  const [startTime, setStartTime] = useState(createTaskData.start);
-  const [endTime, setEndTime] = useState(createTaskData.start + 60);
+  const [startTime, setStartTime] = useState(updateTaskData.startTime);
+  const [endTime, setEndTime] = useState(updateTaskData.startTime + 60);
   const [taskDate, setTaskDate] = useState(
-    createTaskData.taskDate.toISOString().split("T")[0]
+    updateTaskData.date.toISOString().split("T")[0]
   );
 
-  const [taskColour, setTaskColour] = useState(colourOptions[0]);
+  const [taskColour, setTaskColour] = useState(updateTaskData.colour);
   const { taskDispatch } = useTaskContext();
   const handleStartTimeChange = (value: number) => {
     setStartTime(value);
@@ -46,7 +47,7 @@ const CreateEventModal = ({
 
   const handleClickOutside = (e: MouseEvent) => {
     if (e.target instanceof HTMLElement && !e.target.closest("#modal")) {
-      setShowCreateTask(false);
+      setShowUpdateTask(false);
     }
   };
   useEffect(() => {
@@ -56,10 +57,10 @@ const CreateEventModal = ({
     };
   }, []);
   return (
-    <div className="fixed top-0 left-0  z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
+    <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
         <form className="flex flex-col items-center gap-8 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
@@ -69,6 +70,7 @@ const CreateEventModal = ({
               required
               autoFocus
               placeholder="Title*"
+              value={taskInfo.title}
               onChange={(e) => {
                 setTaskInfo((prev) => {
                   return {
@@ -83,6 +85,7 @@ const CreateEventModal = ({
               type="text"
               placeholder="Description"
               className="border-b w-full py-2 focus:outline-none border-zinc-400"
+              value = {taskInfo.description}
               onChange={(e) => {
                 setTaskInfo((prev) => {
                   return {
@@ -100,14 +103,13 @@ const CreateEventModal = ({
             }}
             value={taskDate}
           />
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <DropdownTime
-              label="Start Time"
               value={startTime}
               changeHandler={handleStartTimeChange}
             />
+            <p>to</p>
             <DropdownTime
-              label="End Time"
               value={endTime}
               changeHandler={handleEndTimeChange}
               disabledOptions={disabledEndTimeOptions}
@@ -116,7 +118,7 @@ const CreateEventModal = ({
 
           <div className="grid grid-cols-4 justify-items-center gap-4">
             {colourOptions.map((colour) => (
-              <label key={colour} className={`w-6 h-6 ${colour}  rounded-lg `}>
+              <label key={colour} className={`w-6 h-6 ${colour} rounded-lg `}>
                 {colour === taskColour && (
                   <span className="text-white h-full flex justify-center items-center">
                     <img
@@ -130,6 +132,7 @@ const CreateEventModal = ({
                   className={`w-6 h-6 relative opacity-0`}
                   type="radio"
                   name="colour"
+                  checked = {colour === taskColour}
                   onChange={() => setTaskColour(colour)}
                 />
               </label>
@@ -148,7 +151,7 @@ const CreateEventModal = ({
               onClick={(e) => {
                 e.preventDefault();
                 taskDispatch({
-                  type: "ADD_TASK",
+                  type: "UPDATE_TASK",
                   payload: {
                     title: taskInfo.title,
                     description: taskInfo.description,
@@ -156,9 +159,10 @@ const CreateEventModal = ({
                     endTime,
                     date: new Date(taskDate),
                     colour: taskColour,
+                    id : updateTaskData.id
                   },
                 });
-                setShowCreateTask(false);
+                setShowUpdateTask(false);
               }}
             >
               Save
@@ -166,7 +170,7 @@ const CreateEventModal = ({
             <button
               onClick={(e) => {
                 e.preventDefault();
-                setShowCreateTask(false);
+                setShowUpdateTask(false);
               }}
               className="w-fit py-1 px-6 text-lg outline outline-1 outline-zinc-800 text-zinc-800 rounded-md"
             >
@@ -179,4 +183,4 @@ const CreateEventModal = ({
   );
 };
 
-export default CreateEventModal;
+export default UpdateEventModal;

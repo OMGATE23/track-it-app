@@ -4,6 +4,8 @@ import { numberToTime, sameDate } from "@/helpers/timefunctions";
 import React, { useState } from "react";
 import DayView from "./DayView";
 import CreateEventModal from "../CreateEventModal";
+import { Task } from "@/helpers/types";
+import UpdateEventModal from "../UpdateEventModal";
 
 export type CreateTaskType = {
   start: number;
@@ -17,6 +19,8 @@ const WeekGrid = () => {
     start: 0,
     taskDate: dateState.selectedDate,
   });
+  const [showUpdateTask , setShowUpdateTask] = useState<boolean>(false)
+  const [updateTaskData, setUpdateTaskData] = useState<Task>()
 
   function getDisplayWeek(): Date[] {
     const dayOfWeek = dateState.displayDate.getDay();
@@ -69,6 +73,8 @@ const WeekGrid = () => {
           <DayView
             setCreateTaskData={setCreateTaskData}
             setShowCreateTask={setShowCreateTask}
+            setShowUpdateTask={setShowUpdateTask}
+            setUpdateTaskData = {setUpdateTaskData}
             key={day.getTime()}
             day={day}
             timeIntervals={timeIntervals}
@@ -82,6 +88,9 @@ const WeekGrid = () => {
           createTaskData={createTaskData}
         />
       )}
+      {
+        showUpdateTask && updateTaskData && <UpdateEventModal setShowUpdateTask={setShowUpdateTask} updateTaskData={updateTaskData} />
+      }
     </>
   );
 };

@@ -63,13 +63,16 @@
 }
 
 .task-animation {
-  animation: fadeIn 150ms ease-in;
+  opacity: 0;
+  animation: fadeIn 300ms ease-in;
+  animation-fill-mode: forwards;
 }
 
 @keyframes fadeIn {
   0% {
-    opacity: 0.5;
+    opacity: 0;
   }
+
 
   100% {
     opacity: 1;

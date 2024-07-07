@@ -6,16 +6,10 @@ import { useTaskContext } from "@/context/TaskContext";
 import { CreateTaskType } from "./WeekGrid";
 import TaskDisplay from "./TaskDisplay";
 import { weekDays } from "@/helpers/constansts";
+import { Task } from "@/helpers/types";
 
-export type StructuredTaskType = {
-  title: string;
-  description?: string;
-  date: Date;
-  startTime: number;
-  endTime: number;
-  id: string;
+export interface StructuredTaskType extends Task {
   hallNumber: number;
-  colour: string;
 };
 
 const DayView = ({
@@ -23,12 +17,16 @@ const DayView = ({
   timeIntervals,
   setCreateTaskData,
   setShowCreateTask,
+  setShowUpdateTask,
+  setUpdateTaskData,
   dayNumber,
 }: {
   day: Date;
   dayNumber: number;
   setCreateTaskData: React.Dispatch<React.SetStateAction<CreateTaskType>>;
   setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
+  setUpdateTaskData : React.Dispatch<React.SetStateAction<Task | undefined>>
   timeIntervals: {
     start: number;
     end: number;
@@ -97,7 +95,7 @@ const DayView = ({
             },
           });
         }}
-        className={` w-full bg-white sticky top-0 z-[9999] font-[300] border-b border-zinc-200 select-none px-4 py-1 h-16 flex items-center justify-center gap-2 text-center`}
+        className={` w-full bg-white sticky top-0 z-[1000] font-[300] border-b border-zinc-200 select-none px-4 py-1 h-16 flex items-center justify-center gap-2 text-center`}
       >
         <span className={`${sameDate(day , new Date(Date.now())) ? 'bg-zinc-200' : ''} text-2xl text-zinc-900 w-10 h-10 rounded-full flex items-center justify-center`}>{day.getDate()}</span>
         <span className="text-zinc-600 font-[200]">{weekDays[day.getDay()]}</span>
@@ -117,8 +115,10 @@ const DayView = ({
           displayTasks.map((task) => (
             <TaskDisplay
               dayNumber={dayNumber}
-              key={task.id + task.startTime + task.endTime}
+              key={task.id + task.date.getDate() + task.date.getMonth() + task.date.getFullYear() + task.startTime + task.endTime}
               task={task}
+              setShowUpdateTask={setShowUpdateTask}
+              setUpdateTaskData={setUpdateTaskData}
             />
           ))}
       </div>

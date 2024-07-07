@@ -1,12 +1,23 @@
 import { db } from "../firebase/config";
-import { addDoc, collection, doc, DocumentData, DocumentReference, getDoc, getDocs, query, QuerySnapshot, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, query, QuerySnapshot, updateDoc, where } from "firebase/firestore";
 import { useAuthContext } from "./useAuthContext";
 import { Task } from "@/helpers/types";
+import { Action } from "@/context/task-context/types";
+
+type ADD_TASK = {
+    title: string;
+    description?: string;
+    date: Date;
+    startTime: number;
+    endTime: number;
+    colour: string;
+  };
+
 
 export default function useFirestore() {
   const { state } = useAuthContext();
 
-  async function addTask(task: Task): Promise<{ isError: boolean; id?: string; error?: any }> {
+  async function addTask(task : ADD_TASK): Promise<{ isError: boolean; id?: string; error?: any }> {
     const { user } = state;
     if (!user) {
       return {
@@ -42,7 +53,7 @@ export default function useFirestore() {
       const querySnapshot: QuerySnapshot = await getDocs(q);
       const tasks: Task[] = [];
       querySnapshot.forEach((doc: DocumentData) => {
-        tasks.push({ id: doc.id, ...doc.data() } as Task);
+        tasks.push({ id: doc.id, ...doc.data() , date : doc.data().date.toDate() } as Task);
       });
       console.log(tasks);
       return { tasks };
@@ -85,6 +96,24 @@ export default function useFirestore() {
       return { isError: true, error };
     }
   }
+  async function deleteTask(taskId : string): Promise<{ isError: boolean; message ?: string ; error?: any }> {
+    const { user } = state;
+    if (!user) {
+      return {
+        isError: true,
+        error: "User not found. Log in to continue",
+      };
+    }
+  
+    try {
+      await deleteDoc(doc(db , "tasks" ,taskId))
+      console.log('Task added');
+      return { isError: false , message  :"Task Deleted Successfully"};
+    } catch (error: any) {
+      console.error("Error adding task:", error);
+      return { isError: true, error };
+    }
+  }
 
-  return { addTask , getAllUserTasks , updateTask};
+  return { addTask , getAllUserTasks , updateTask , deleteTask};
 };

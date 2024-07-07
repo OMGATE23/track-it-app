@@ -59,7 +59,7 @@ const CreateEventModal = ({
     <div className="fixed top-0 left-0  z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up min-w-[360px] relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
         <form className="flex flex-col items-center gap-8 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
@@ -100,14 +100,13 @@ const CreateEventModal = ({
             }}
             value={taskDate}
           />
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <DropdownTime
-              label="Start Time"
               value={startTime}
               changeHandler={handleStartTimeChange}
             />
+            to
             <DropdownTime
-              label="End Time"
               value={endTime}
               changeHandler={handleEndTimeChange}
               disabledOptions={disabledEndTimeOptions}

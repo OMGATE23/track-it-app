@@ -1,105 +1,76 @@
 "use client";
-import React, { ReactNode, createContext, useContext, useReducer } from "react";
+import React, { ReactNode, createContext, useContext, useEffect, useReducer } from "react";
 import {Task} from '../helpers/types'
+import { Action } from "./task-context/types";
+import useFirestore from "@/hooks/useFirestore";
+import { useAuthContext } from "@/hooks/useAuthContext";
+
 export type TaskState = {
   tasks: Task[];
+  loading : boolean;
+  error? : string;
 };
 
 export type TaskContextType = {
   tasksState: TaskState;
-  taskDispatch: React.Dispatch<Action>;
+  taskDispatch: (action : Action) => Promise<void>;
 };
-
-export type Action =
-  | {
-      type: "ADD_TASK";
-      payload: {
-        title: string;
-        description?: string;
-        date: Date;
-        startTime: number;
-        endTime: number;
-        colour: string;
-      };
-    }
-  | {
-      type: "DELETE_TASK";
-      payload: {
-        id: string;
-      };
-    }
-  | {
-      type: "UPDATE_TIME";
-      payload: {
-        id: string;
-        startTime: number;
-        endTime: number;
-      };
-    }
-  | {
-      type: "UPDATE_DATE";
-      payload: {
-        id: string;
-        newDate: Date;
-        oldDate: Date;
-        startTime: number;
-        endTime: number;
-      };
-    }
-  | {
-      type: "UPDATE_COLOUR";
-      payload: {
-        id: string;
-        colour: string;
-      };
-    }
-  | {
-      type: "UPDATE_TASK";
-      payload: {
-        title: string;
-        description?: string;
-        date: Date;
-        startTime: number;
-        endTime: number;
-        id: string;
-        colour: string;
-      };
-    };
 
 export const TaskContext = createContext<TaskContextType>({
   tasksState: {
     tasks: [],
+    loading : true
   },
-  taskDispatch: () => {},
+  taskDispatch: async () => {}
 });
 
 export function useTaskContext() {
   return useContext(TaskContext);
 }
 const TaskContextProvider = ({ children }: { children: ReactNode }) => {
+  const {addTask , getAllUserTasks , updateTask , deleteTask} = useFirestore()
   const [tasksState, taskDispatch] = useReducer(reducer, {
     tasks: [],
+    loading : true
   });
+  const {state : userState} = useAuthContext()
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const result = await getAllUserTasks();
+      if (!result.errorOccured && result.tasks) {
+        taskDispatch({ type: "SET_TASKS", payload: result.tasks });
+      } else {
+        taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+      }
+      taskDispatch({ type: "LOADING_COMPLETE" });
+    };
+    fetchTasks();
+  }, [userState.user]);
 
   function reducer(state: TaskState, action: Action): TaskState {
     switch (action.type) {
-      case "ADD_TASK": {
-        const { payload: task } = action;
-        let taskId = crypto.randomUUID();
-        let newtasks = [
-          ...state.tasks,
-          {
-            ...task,
-            description: task.description || "",
-            id: taskId,
-            colour: task.colour,
-            project : '',
-          } as Task,
-        ];
-        
-        return {
-          tasks: newtasks,
-        };
+      case "SET_TASKS" :  {
+        console.log(">>>tasks" , action.payload)
+        return ({
+          ...state,
+          tasks : action.payload
+        })
+      }
+
+      case "SET_ERROR" : {
+        return ({
+          ...state,
+          error : action.payload,
+          loading : false
+        })
+      }
+
+      case "LOADING_COMPLETE" : {
+        return ({
+          ...state,
+          loading : false
+        })
       }
 
       case "DELETE_TASK": {
@@ -110,93 +81,130 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
         newtasks = newtasks.filter((task) => task.id !== toBeDeletedId);
 
         return {
+          ...state,
           tasks: newtasks,
         };
       }
 
-      case "UPDATE_TIME": {
-        const { id, startTime, endTime } = action.payload;
-        let newTasks = [...state.tasks];
 
-        newTasks = newTasks.map((task) => {
-          if (task.id === id) {
-            task.startTime = startTime;
-            task.endTime = endTime;
-
-            if (endTime <= startTime) {
-              task.endTime = task.startTime + 15;
-            }
-            let timeDiff = endTime - startTime;
-            if (task.endTime > 1440) {
-              task.endTime = 1440;
-              task.startTime = 1440 - timeDiff;
-            }
-          }
-          return task;
-        });
-
-        return {
-          tasks: newTasks,
-        };
-      }
-      case "UPDATE_DATE": {
-        const { id, newDate, startTime, endTime } = action.payload;
-
-        let newTasks = [...state.tasks];
-
-        newTasks = newTasks.map((task) => {
-          if (task.id === id) {
-            task.date = newDate;
-            task.startTime = startTime;
-            task.endTime = endTime;
-
-            if (task.endTime > 1440) {
-              task.endTime = 1440;
-              task.startTime = 1440 - (startTime - endTime);
-            }
-          }
-          return task;
-        });
-
-        return {
-          tasks: newTasks,
-        };
-      }
-
-      case "UPDATE_TASK": {
-        const { id, date, startTime, endTime, title, description, colour } =
-          action.payload;
-
-        let newTasks = [...state.tasks];
-
-        newTasks = newTasks.map((task) => {
-          if (task.id === id) {
-            task.title = title;
-            task.colour = colour;
-            task.description = description || "";
-            task.date = date;
-            task.startTime = startTime;
-            task.endTime = endTime;
-
-            if (task.endTime > 1440) {
-              task.endTime = 1440;
-              task.startTime = 1440 - (startTime - endTime);
-            }
-          }
-          return task;
-        });
-
-        return {
-          tasks: newTasks,
-        };
-      }
 
       default:
         return state;
     }
   }
+
+  const asyncTaskDispatch = async (action: Action) => {
+    switch (action.type) {
+      case "ADD_TASK": {
+        const { payload: task } = action;
+        
+        const result = await addTask(task);
+        if (!result.isError) {
+          const updatedTasksResult = await getAllUserTasks();
+          if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
+            taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+          } else {
+            taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
+          }
+        } else {
+          taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+        }
+        break;
+      }
+      case "UPDATE_TASK": {
+        const { payload } = action;
+        const taskToUpdate = tasksState.tasks.find((task) => task.id === payload.id);
+        if(taskToUpdate){
+          const result = await updateTask({...taskToUpdate , ...payload});
+        if (!result.isError) {
+          const updatedTasksResult = await getAllUserTasks();
+          if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
+            taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+          } else {
+            taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
+          }
+        } else {
+          taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+        }
+        }
+        break;
+      }
+      case "DELETE_TASK": {
+        const { payload } = action;
+        const result = await deleteTask(payload.id)
+        if (!result.isError) {
+          const updatedTasksResult = await getAllUserTasks();
+          if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
+            taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+          } else {
+            taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
+          }
+        } else {
+          taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+        }
+        
+        break;
+      }
+      case "UPDATE_TIME": {
+        const { id, startTime, endTime } = action.payload;
+        const taskToUpdate = tasksState.tasks.find((task) => task.id === id);
+        if (taskToUpdate) {
+          taskDispatch({ 
+            type: "SET_TASKS", 
+            payload: [...tasksState.tasks.map(task => {
+              if(task.id === id){
+                task = {...task , startTime, endTime}
+              }
+              return task
+            })
+          ] });
+          const result = await updateTask({ ...taskToUpdate, startTime, endTime });
+          if (!result.isError) {
+            const updatedTasksResult = await getAllUserTasks();
+            if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
+              taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+            } else {
+              taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
+            }
+          } else {
+            taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+          }
+        }
+        break;
+      }
+      case "UPDATE_DATE": {
+        const { id, newDate, startTime, endTime } = action.payload;
+        const taskToUpdate = tasksState.tasks.find((task) => task.id === id);
+        if (taskToUpdate) {
+          taskDispatch({ 
+            type: "SET_TASKS", 
+            payload: [...tasksState.tasks.map(task => {
+              if(task.id === id){
+                task = {...task , date: newDate, startTime, endTime}
+              }
+              return task
+            })
+          ] });
+          const result = await updateTask({ ...taskToUpdate, date: newDate, startTime, endTime });
+          if (!result.isError) {
+            const updatedTasksResult = await getAllUserTasks();
+            if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
+              taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+            } else {
+              taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
+            }
+          } else {
+            taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
+          }
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  };
   return (
-    <TaskContext.Provider value={{ tasksState, taskDispatch }}>
+    <TaskContext.Provider value={{ tasksState, taskDispatch : asyncTaskDispatch }}>
       {children}
     </TaskContext.Provider>
   );

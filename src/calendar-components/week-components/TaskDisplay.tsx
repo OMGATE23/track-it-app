@@ -1,8 +1,9 @@
 import { useTaskContext } from "@/context/TaskContext";
-import { useEffect, useRef, useReducer } from "react";
+import { useEffect, useRef, useReducer, useState } from "react";
 import { StructuredTaskType } from "./DayView";
 import { numberToTime } from "@/helpers/timefunctions";
-import { TaskDimensions, TypeDimensionAction } from "@/helpers/types";
+import { Task, TaskDimensions, TypeDimensionAction } from "@/helpers/types";
+import UpdateEventModal from "../UpdateEventModal";
 
 const initialState: TaskDimensions = {
   top: 0,
@@ -47,9 +48,13 @@ const reducer = (
 const TaskDisplay = ({
   task,
   dayNumber,
+  setShowUpdateTask,
+  setUpdateTaskData
 }: {
   task: StructuredTaskType;
   dayNumber: number;
+  setShowUpdateTask : React.Dispatch<React.SetStateAction<boolean>>;
+  setUpdateTaskData : React.Dispatch<React.SetStateAction<Task | undefined>>
 }) => {
   const refDrag = useRef<HTMLDivElement | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -101,10 +106,13 @@ const TaskDisplay = ({
   };
 
   const handleMouseUp = () => {
+    dispatch({ type: "SET_MOUSE_MOVING", payload: false });
     if (state.left === 0 && state.top === task.startTime) {
+      setShowUpdateTask(true)
+      setUpdateTaskData(task)
       return;
     }
-    dispatch({ type: "SET_MOUSE_MOVING", payload: false });
+    
     let newTop = Math.floor(state.top / 15) * 15;
     let dateOffset = 0;
     if (Math.abs(state.left) > 64) {
@@ -116,17 +124,17 @@ const TaskDisplay = ({
     if (dateOffset !== 0) {
       let newDate = new Date(task.date);
       newDate.setDate(newDate.getDate() + dateOffset);
-      dispatch({ type: "SET_MOUSE_UP", payload: true });
+      if(ref.current) ref.current.style.display = 'none'
       taskDispatch({
         type: "UPDATE_DATE",
         payload: {
           id: task.id,
           startTime: newTop,
           endTime: task.endTime - task.startTime + newTop,
-          oldDate: task.date,
           newDate: newDate,
         },
       });
+      
     } else {
       taskDispatch({
         type: "UPDATE_TIME",
@@ -187,9 +195,8 @@ const TaskDisplay = ({
   return (
     <div
       id={task.id}
-      key={task.id}
       ref={ref}
-      className={`task-animation resizeable ${task.colour} rounded-md`}
+      className={` resizeable ${task.colour} rounded-md`}
       style={{
         position: "absolute",
         top: state.top * (16 / 15) + "px",
@@ -207,6 +214,11 @@ const TaskDisplay = ({
             : `calc(80% - ${task.hallNumber * 20}px)`,
         zIndex: state.isMouseMoving || state.isSliderMoving ? 20 : 10,
         display: state.isMouseUp ? "none" : "block",
+        outline : task.hallNumber > 0 ? "1px solid white" : ""
+      }}
+      onClick={(e) => {
+        e.preventDefault()
+        console.log('event clicked')
       }}
     >
       <div
