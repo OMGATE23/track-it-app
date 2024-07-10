@@ -17,7 +17,7 @@ const WeekGrid = () => {
   const [showCreateTask, setShowCreateTask] = useState<boolean>(false);
   const [createTaskData, setCreateTaskData] = useState<CreateTaskType>({
     start: 0,
-    taskDate: dateState.selectedDate,
+    taskDate: dateState.displayDate,
   });
   const [showUpdateTask , setShowUpdateTask] = useState<boolean>(false)
   const [updateTaskData, setUpdateTaskData] = useState<Task>()

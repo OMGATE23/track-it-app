@@ -82,8 +82,6 @@ const DayView = ({
     const structuredTasks = getFormatedTasks();
     setDisplayTasks(structuredTasks || []);
   }, [tasks]);
-
-  console.log(tasks)
   return (
     <div className="min-w-32 relative border-[0.5px] border-zinc-200">
       <button

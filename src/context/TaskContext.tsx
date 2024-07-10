@@ -51,7 +51,6 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
   function reducer(state: TaskState, action: Action): TaskState {
     switch (action.type) {
       case "SET_TASKS" :  {
-        console.log(">>>tasks" , action.payload)
         return ({
           ...state,
           tasks : action.payload

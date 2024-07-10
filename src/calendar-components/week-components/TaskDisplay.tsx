@@ -218,7 +218,6 @@ const TaskDisplay = ({
       }}
       onClick={(e) => {
         e.preventDefault()
-        console.log('event clicked')
       }}
     >
       <div

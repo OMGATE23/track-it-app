@@ -31,7 +31,6 @@ export default function useFirestore() {
         ...task,
         userId: user.uid,
       });
-      console.log('Task added');
       return { isError: false, id: docRef.id };
     } catch (error: any) {
       console.error("Error adding task:", error);
@@ -55,7 +54,6 @@ export default function useFirestore() {
       querySnapshot.forEach((doc: DocumentData) => {
         tasks.push({ id: doc.id, ...doc.data() , date : doc.data().date.toDate() } as Task);
       });
-      console.log(tasks);
       return { tasks };
     } catch (error: any) {
       console.error("Error fetching tasks:", error);
@@ -89,7 +87,6 @@ export default function useFirestore() {
         endTime: task.endTime,
         colour: task.colour,
       });
-      console.log('Task updated');
       return { isError: false };
     } catch (error: any) {
       console.error("Error updating task:", error);
@@ -107,7 +104,6 @@ export default function useFirestore() {
   
     try {
       await deleteDoc(doc(db , "tasks" ,taskId))
-      console.log('Task added');
       return { isError: false , message  :"Task Deleted Successfully"};
     } catch (error: any) {
       console.error("Error adding task:", error);
