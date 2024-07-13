@@ -1,4 +1,5 @@
-import { MONTHS_FULL_NAME } from "./constansts";
+import { MONTHS_FULL_NAME, TAGS } from "./constansts";
+import { Resp_Tag, Tag } from "./types";
 
 export function sameDate(date1: Date, date2: Date): boolean {
   return (
@@ -56,4 +57,13 @@ export function monthDayYearFormatDate(date : Date) : string {
   }
 
   return `${month} ${day}${daySuffix}, ${year}`;
+}
+
+export function getProcessedTags(tags : Resp_Tag[] = []) : Tag[] {
+  let processedTags : Tag[] = []
+
+  processedTags = tags.map(t => (
+    TAGS[t.type].find(findTag => findTag.tag === t.tag)!
+  ))
+  return processedTags
 }

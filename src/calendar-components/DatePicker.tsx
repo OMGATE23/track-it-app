@@ -1,10 +1,13 @@
 import { useDateContext } from '@/context/DateContext'
-import { monthDayYearFormatDate } from '@/helpers/timefunctions'
+import { monthDayYearFormatDate } from '@/helpers/helper'
 import React, { useEffect, useRef, useState } from 'react'
 import Calendar from './Calendar'
 
+interface Props {
+  className ?: string 
+}
 
-const DatePicker = () => {
+const DatePicker = ({className} : Props) => {
   const {state} = useDateContext()
   const [showCalendar , setShowCalendar] = useState(false)
     
@@ -24,7 +27,7 @@ const DatePicker = () => {
   }, []);
   
   return (
-    <div ref = {calendarRef}>
+    <div className={className + ' relative'} ref = {calendarRef}>
       <div 
         className='outline w-64 outline-1 outline-zinc-200 py-1 px-4 rounded-md shadow-sm relative cursor-pointer flex items-center gap-2'
         onClick={() => setShowCalendar(prev => !prev)}

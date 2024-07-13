@@ -51,7 +51,6 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
   function reducer(state: TaskState, action: Action): TaskState {
     switch (action.type) {
       case "SET_TASKS" :  {
-        console.log(">>>tasks" , action.payload)
         return ({
           ...state,
           tasks : action.payload
@@ -72,21 +71,6 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
           loading : false
         })
       }
-
-      case "DELETE_TASK": {
-        const { id: toBeDeletedId } = action.payload;
-
-        let newtasks = [...state.tasks];
-
-        newtasks = newtasks.filter((task) => task.id !== toBeDeletedId);
-
-        return {
-          ...state,
-          tasks: newtasks,
-        };
-      }
-
-
 
       default:
         return state;

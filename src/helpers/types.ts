@@ -31,7 +31,7 @@ export interface Task {
   id: string;
   colour: string;
   project : string;
-  tags : string[];
+  tags : Resp_Tag[];
   userId : string;
 }
 
@@ -40,3 +40,27 @@ export interface Project {
   description? : string;
   id : string
 }
+
+export type Tag = {
+  tag: string;
+  background: string;
+  outline: string;
+  type : string;
+};
+
+export type Resp_Tag = {
+  type : string;
+  tag : string;
+} 
+
+export type Tags = {
+  task: Tag[];
+  priority: Tag[];
+  status: Tag[];
+  department: Tag[];
+  time: Tag[];
+  efforts: Tag[];
+  location: Tag[];
+  ownership: Tag[];
+  other : Tag[]
+};

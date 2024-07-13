@@ -1,8 +1,11 @@
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { CreateTaskType } from "./week-components/WeekGrid";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
 import { colourOptions } from "@/helpers/constansts";
+import DatePicker from "./DatePicker";
+import TagsSelector from "./TagsSelector";
+import { Tag } from "@/helpers/types";
 type CreateEventModalType = {
   setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
   createTaskData: CreateTaskType;
@@ -26,7 +29,7 @@ const CreateEventModal = ({
   const [taskDate, setTaskDate] = useState(
     createTaskData.taskDate.toISOString().split("T")[0]
   );
-
+  const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
   const [taskColour, setTaskColour] = useState(colourOptions[0]);
   const { taskDispatch } = useTaskContext();
   const handleStartTimeChange = (value: number) => {
@@ -35,6 +38,7 @@ const CreateEventModal = ({
       setEndTime(value + 15);
     }
   };
+  const componentRef = useRef<HTMLDivElement>(null)
 
   const handleEndTimeChange = (value: number) => {
     setEndTime(value);
@@ -44,27 +48,16 @@ const CreateEventModal = ({
     disabledEndTimeOptions.push(i);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (e.target instanceof HTMLElement && !e.target.closest("#modal")) {
-      setShowCreateTask(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
   return (
-    <div className="fixed top-0 left-0  z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
+    <div ref={componentRef} className="fixed top-0 left-0  z-[999999] bg-[rgba(0,0,0,0.2)] w-[100%] h-[100vh] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up min-w-[360px] relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up md:w-[75%] h-[90%] relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
-        <form className="flex flex-col items-center gap-8 w-[80%] mx-auto">
+        <form className="flex flex-col items-start gap-8 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
             <input
-              className="border-b w-full py-2 focus:outline-none border-zinc-400 "
+              className="border-b w-[75%] py-2 text-xl focus:outline-none focus:border-blue-400 border-zinc-400"
               type="text"
               required
               autoFocus
@@ -79,43 +72,35 @@ const CreateEventModal = ({
               }}
             />
 
+            
+          </div>
+            <div className="flex items-center gap-4">
             <input
-              type="text"
-              placeholder="Description"
-              className="border-b w-full py-2 focus:outline-none border-zinc-400"
+              type="date"
               onChange={(e) => {
-                setTaskInfo((prev) => {
-                  return {
-                    ...prev,
-                    description: e.target.value,
-                  };
-                });
+                setTaskDate(e.target.value);
               }}
-            />
+              className="py-1 px-2 outline outline-1 outline-zinc-300 rounded-md"
+              value={taskDate}
+            /> 
+            <div className="flex items-center gap-4">
+              <DropdownTime
+                value={startTime}
+                changeHandler={handleStartTimeChange}
+              />
+              to
+              <DropdownTime
+                value={endTime}
+                changeHandler={handleEndTimeChange}
+                disabledOptions={disabledEndTimeOptions}
+              />
+            </div>
           </div>
-          <input
-            type="date"
-            onChange={(e) => {
-              setTaskDate(e.target.value);
-            }}
-            value={taskDate}
-          />
-          <div className="flex items-center gap-4">
-            <DropdownTime
-              value={startTime}
-              changeHandler={handleStartTimeChange}
-            />
-            to
-            <DropdownTime
-              value={endTime}
-              changeHandler={handleEndTimeChange}
-              disabledOptions={disabledEndTimeOptions}
-            />
-          </div>
-
-          <div className="grid grid-cols-4 justify-items-center gap-4">
+          <TagsSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+          <div className="flex items-center justify-items-center gap-4">
+            <p>Color:</p>
             {colourOptions.map((colour) => (
-              <label key={colour} className={`w-6 h-6 ${colour}  rounded-lg `}>
+              <label key={colour} className={`w-6 h-6 ${colour} cursor-pointer rounded-lg `}>
                 {colour === taskColour && (
                   <span className="text-white h-full flex justify-center items-center">
                     <img
@@ -126,7 +111,7 @@ const CreateEventModal = ({
                   </span>
                 )}
                 <input
-                  className={`w-6 h-6 relative opacity-0`}
+                  className={`w-6 h-6 cursor-pointer relative opacity-0`}
                   type="radio"
                   name="colour"
                   onChange={() => setTaskColour(colour)}
@@ -134,6 +119,20 @@ const CreateEventModal = ({
               </label>
             ))}
           </div>
+          <textarea
+              rows={10}
+              placeholder="Description"
+              wrap="hard"
+              className="bg-zinc-100 font-[300] p-4 rounded-md w-full py-2 focus:outline-none resize-none placeholder:text-zinc-600"
+              onChange={(e) => {
+                setTaskInfo((prev) => {
+                  return {
+                    ...prev,
+                    description: e.target.value,
+                  };
+                });
+              }}
+            />
 
           <div className="flex items-center gap-6">
             <button
@@ -155,6 +154,7 @@ const CreateEventModal = ({
                     endTime,
                     date: new Date(taskDate),
                     colour: taskColour,
+                    tags : selectedTags.map(({tag , type}) => ({tag , type}))
                   },
                 });
                 setShowCreateTask(false);

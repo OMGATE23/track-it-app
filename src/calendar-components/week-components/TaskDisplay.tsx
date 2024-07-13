@@ -1,9 +1,10 @@
 import { useTaskContext } from "@/context/TaskContext";
 import { useEffect, useRef, useReducer, useState } from "react";
 import { StructuredTaskType } from "./DayView";
-import { numberToTime } from "@/helpers/timefunctions";
+import { numberToTime } from "@/helpers/helper";
 import { Task, TaskDimensions, TypeDimensionAction } from "@/helpers/types";
 import UpdateEventModal from "../UpdateEventModal";
+import TaskInfo from "./TaskInfo";
 
 const initialState: TaskDimensions = {
   top: 0,
@@ -48,12 +49,12 @@ const reducer = (
 const TaskDisplay = ({
   task,
   dayNumber,
-  setShowUpdateTask,
+  setShowInfo,
   setUpdateTaskData
 }: {
   task: StructuredTaskType;
   dayNumber: number;
-  setShowUpdateTask : React.Dispatch<React.SetStateAction<boolean>>;
+  setShowInfo : React.Dispatch<React.SetStateAction<boolean>>;
   setUpdateTaskData : React.Dispatch<React.SetStateAction<Task | undefined>>
 }) => {
   const refDrag = useRef<HTMLDivElement | null>(null);
@@ -66,7 +67,6 @@ const TaskDisplay = ({
     top: task.startTime,
   });
   const { taskDispatch } = useTaskContext();
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as HTMLElement)) {
@@ -108,7 +108,7 @@ const TaskDisplay = ({
   const handleMouseUp = () => {
     dispatch({ type: "SET_MOUSE_MOVING", payload: false });
     if (state.left === 0 && state.top === task.startTime) {
-      setShowUpdateTask(true)
+      setShowInfo(true)
       setUpdateTaskData(task)
       return;
     }
@@ -218,7 +218,6 @@ const TaskDisplay = ({
       }}
       onClick={(e) => {
         e.preventDefault()
-        console.log('event clicked')
       }}
     >
       <div
