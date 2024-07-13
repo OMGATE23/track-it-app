@@ -1,5 +1,5 @@
 import { useDateContext } from "@/context/DateContext";
-import { sameDate } from "@/helpers/timefunctions";
+import { sameDate } from "@/helpers/helper";
 import React, { useEffect, useState } from "react";
 import TimeBox from "./TimeBox";
 import { useTaskContext } from "@/context/TaskContext";
@@ -17,7 +17,7 @@ const DayView = ({
   timeIntervals,
   setCreateTaskData,
   setShowCreateTask,
-  setShowUpdateTask,
+  setShowInfo,
   setUpdateTaskData,
   dayNumber,
 }: {
@@ -25,7 +25,7 @@ const DayView = ({
   dayNumber: number;
   setCreateTaskData: React.Dispatch<React.SetStateAction<CreateTaskType>>;
   setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
   setUpdateTaskData : React.Dispatch<React.SetStateAction<Task | undefined>>
   timeIntervals: {
     start: number;
@@ -115,7 +115,7 @@ const DayView = ({
               dayNumber={dayNumber}
               key={task.id + task.date.getDate() + task.date.getMonth() + task.date.getFullYear() + task.startTime + task.endTime}
               task={task}
-              setShowUpdateTask={setShowUpdateTask}
+              setShowInfo={setShowInfo}
               setUpdateTaskData={setUpdateTaskData}
             />
           ))}

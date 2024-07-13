@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CreateTaskType } from "./week-components/WeekGrid";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
 import { colourOptions } from "@/helpers/constansts";
-import { Task } from "@/helpers/types";
+import { Tag, Task } from "@/helpers/types";
+import TagsSelector from "./TagsSelector";
+import { getProcessedTags } from "@/helpers/helper";
 type UpdateEventModalType = {
   setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
   updateTaskData: Task;
@@ -27,9 +28,11 @@ const UpdateEventModal = ({
   const [taskDate, setTaskDate] = useState(
     updateTaskData.date.toISOString().split("T")[0]
   );
-
   const [taskColour, setTaskColour] = useState(updateTaskData.colour);
+  const [selectedTasks, setSelectedTags] = useState<Array<Tag>>(getProcessedTags(updateTaskData.tags))
   const { taskDispatch } = useTaskContext();
+
+
   const handleStartTimeChange = (value: number) => {
     setStartTime(value);
     if (endTime <= value) {
@@ -45,27 +48,18 @@ const UpdateEventModal = ({
     disabledEndTimeOptions.push(i);
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (e.target instanceof HTMLElement && !e.target.closest("#modal")) {
-      setShowUpdateTask(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
   return (
-    <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] flex justify-center items-center">
+    <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up md:w-[75%] h-[90%] relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
-        <form className="flex flex-col items-center gap-8 w-[80%] mx-auto">
+        <form 
+          onSubmit={(e) => e.preventDefault()}
+          className="flex flex-col items-start gap-8 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
             <input
-              className="border-b w-full py-2 focus:outline-none border-zinc-400 "
+              className="border-b w-[75%] py-2 text-xl focus:outline-none focus:border-blue-400 border-zinc-400"
               type="text"
               required
               autoFocus
@@ -80,43 +74,33 @@ const UpdateEventModal = ({
                 });
               }}
             />
-
-            <input
-              type="text"
-              placeholder="Description"
-              className="border-b w-full py-2 focus:outline-none border-zinc-400"
-              value = {taskInfo.description}
-              onChange={(e) => {
-                setTaskInfo((prev) => {
-                  return {
-                    ...prev,
-                    description: e.target.value,
-                  };
-                });
-              }}
-            />
           </div>
-          <input
-            type="date"
-            onChange={(e) => {
-              setTaskDate(e.target.value);
-            }}
-            value={taskDate}
-          />
+          
           <div className="flex items-center gap-4">
-            <DropdownTime
-              value={startTime}
-              changeHandler={handleStartTimeChange}
+            <input
+              type="date"
+              onChange={(e) => {
+                setTaskDate(e.target.value);
+              }}
+              value={taskDate}
+              className="py-1 px-2 outline outline-1 outline-zinc-300 rounded-md"
             />
-            <p>to</p>
-            <DropdownTime
-              value={endTime}
-              changeHandler={handleEndTimeChange}
-              disabledOptions={disabledEndTimeOptions}
-            />
+            <div className="flex items-center gap-4">
+              <DropdownTime
+                value={startTime}
+                changeHandler={handleStartTimeChange}
+              />
+              <p>to</p>
+              <DropdownTime
+                value={endTime}
+                changeHandler={handleEndTimeChange}
+                disabledOptions={disabledEndTimeOptions}
+              />
+            </div>
           </div>
-
-          <div className="grid grid-cols-4 justify-items-center gap-4">
+          <TagsSelector selectedTags={selectedTasks} setSelectedTags={setSelectedTags} />
+          <div className="flex items-center justify-items-center gap-4">
+            Color: 
             {colourOptions.map((colour) => (
               <label key={colour} className={`w-6 h-6 ${colour} rounded-lg `}>
                 {colour === taskColour && (
@@ -138,7 +122,21 @@ const UpdateEventModal = ({
               </label>
             ))}
           </div>
-
+          <textarea
+              rows={10}
+              wrap = 'hard'
+              placeholder="Description"
+              className="bg-zinc-100 font-[300] p-4 rounded-md w-full py-2 focus:outline-none resize-none placeholder:text-zinc-600"
+              value = {taskInfo.description}
+              onChange={(e) => {
+                setTaskInfo((prev) => {
+                  return {
+                    ...prev,
+                    description: e.target.value,
+                  };
+                });
+              }}
+            />
           <div className="flex items-center gap-6">
             <button
               type="submit"
@@ -159,7 +157,8 @@ const UpdateEventModal = ({
                     endTime,
                     date: new Date(taskDate),
                     colour: taskColour,
-                    id : updateTaskData.id
+                    id : updateTaskData.id,
+                    tags : selectedTasks.map(({tag, type}) => ({tag , type}))
                   },
                 });
                 setShowUpdateTask(false);

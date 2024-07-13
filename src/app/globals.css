@@ -143,6 +143,11 @@
     cursor : pointer;
 }
 
+.sidebar-options.current {
+  color : black;
+  font-weight: normal;
+}
+
 .fade-in-pop{
   animation: fade-in-pop 300ms ease-in-out forwards;
   position: relative;
@@ -160,4 +165,31 @@
     height: 100%;
     top : 0px;
   }
+}
+
+.calendar-display {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;
+}
+.calendar-display::-webkit-scrollbar {
+  width: 2px !important; /* Remove scrollbar space */
+  background: #e6e6e6 !important; /* Optional: just to avoid a visual difference */
+}
+
+.fade-up-delete-modal {
+  opacity: 0;
+  animation: deleteModal 200ms forwards;
+}
+
+
+@keyframes deleteModal {
+  0% {
+    opacity: 0;
+    background-color: red;
+  }
+
+  100% {
+    opacity: 1;
+  }
+  
 }

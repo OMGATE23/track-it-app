@@ -2,7 +2,7 @@
 
 import { useDateContext } from "@/context/DateContext";
 import { MONTHS } from "../helpers/constansts";
-import { sameDate } from "@/helpers/timefunctions";
+import { sameDate } from "@/helpers/helper";
 import { SetStateAction } from "react";
 
 interface Props {
@@ -58,7 +58,7 @@ export default function Calendar({setShowCalendar} : Props) {
   }
 
   return (
-    <div className="h-fit w-fit fade-in-pop border border-zinc-100 p-4 shadow-sm rounded-md sticky top-4 flex flex-col items-center gap-2 ">
+    <div className="h-fit w-fit fade-in-pop border border-zinc-200 p-4 shadow-sm rounded-md sticky top-4 flex flex-col items-center gap-2 ">
       <div className="flex items-center justify-between w-full ">
         <button onClick={previousMonthHandler}>
             <img alt = "left" className="w-5" src="/assets/icons/chevronLeft.svg" />

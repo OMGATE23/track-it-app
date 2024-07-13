@@ -72,21 +72,6 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
         })
       }
 
-      case "DELETE_TASK": {
-        const { id: toBeDeletedId } = action.payload;
-
-        let newtasks = [...state.tasks];
-
-        newtasks = newtasks.filter((task) => task.id !== toBeDeletedId);
-
-        return {
-          ...state,
-          tasks: newtasks,
-        };
-      }
-
-
-
       default:
         return state;
     }
