@@ -116,7 +116,7 @@ const UpdateEventModal = ({
             />
           </div>
 
-          <div className="grid grid-cols-4 justify-items-center gap-4">
+          <div className="flex items-center gap-4">
             {colourOptions.map((colour) => (
               <label key={colour} className={`w-6 h-6 ${colour} rounded-lg `}>
                 {colour === taskColour && (

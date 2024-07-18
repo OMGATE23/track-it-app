@@ -18,7 +18,7 @@ export default function DropdownTime({
   }
 
   return (
-    <div className="flex gap-2 w-full items-center">
+    <div className="flex gap-2 items-center">
       <select
         className="outline outline-1 outline-zinc-300 p-2 rounded-md"
         value={value}
