@@ -1,11 +1,12 @@
 "use client";
 import { useDateContext } from "@/context/DateContext";
-import { numberToTime, sameDate } from "@/helpers/timefunctions";
+import { numberToTime, sameDate } from "@/helpers/helper";
 import React, { useState } from "react";
 import DayView from "./DayView";
 import CreateEventModal from "../CreateEventModal";
 import { Task } from "@/helpers/types";
 import UpdateEventModal from "../UpdateEventModal";
+import TaskInfo from "./TaskInfo";
 
 export type CreateTaskType = {
   start: number;
@@ -17,11 +18,11 @@ const WeekGrid = () => {
   const [showCreateTask, setShowCreateTask] = useState<boolean>(false);
   const [createTaskData, setCreateTaskData] = useState<CreateTaskType>({
     start: 0,
-    taskDate: dateState.selectedDate,
+    taskDate: dateState.displayDate,
   });
   const [showUpdateTask , setShowUpdateTask] = useState<boolean>(false)
   const [updateTaskData, setUpdateTaskData] = useState<Task>()
-
+  const [showInfo , setShowInfo] = useState(false)
   function getDisplayWeek(): Date[] {
     const dayOfWeek = dateState.displayDate.getDay();
     const daysInSameWeek = [];
@@ -55,7 +56,7 @@ const WeekGrid = () => {
   let displayWeek = getDisplayWeek();
   return (
     <>
-      <div className="flex items-start max-h-[100%] overflow-y-scroll">
+      <div className="calendar-display flex items-start max-h-[100%] overflow-auto">
         <div className="w-32 text-xs text-zinc-700">
           <div className="h-14 py-2 px-1 flex justify-end items-end">
             GMT + {numberToTime(new Date(Date.now()).getTimezoneOffset())}
@@ -73,7 +74,7 @@ const WeekGrid = () => {
           <DayView
             setCreateTaskData={setCreateTaskData}
             setShowCreateTask={setShowCreateTask}
-            setShowUpdateTask={setShowUpdateTask}
+            setShowInfo={setShowInfo}
             setUpdateTaskData = {setUpdateTaskData}
             key={day.getTime()}
             day={day}
@@ -90,6 +91,10 @@ const WeekGrid = () => {
       )}
       {
         showUpdateTask && updateTaskData && <UpdateEventModal setShowUpdateTask={setShowUpdateTask} updateTaskData={updateTaskData} />
+      }
+
+      {
+        showInfo && updateTaskData && <TaskInfo setShowInfo={setShowInfo} setShowUpdateModal={setShowUpdateTask} task={updateTaskData} />
       }
     </>
   );

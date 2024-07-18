@@ -31,7 +31,7 @@ export interface Task {
   id: string;
   colour: string;
   project : string;
-  tags : string[];
+  tags : Resp_Tag[];
   userId : string;
 }
 
