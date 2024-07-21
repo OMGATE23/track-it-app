@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
 import { colourOptions } from "@/helpers/constansts";
 import { Tag, Task } from "@/helpers/types";
 import TagsSelector from "./TagsSelector";
 import { getProcessedTags } from "@/helpers/helper";
+import ProjectSelector from "../projects/ProjectSelector";
 type UpdateEventModalType = {
   setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
   updateTaskData: Task;
@@ -30,6 +31,7 @@ const UpdateEventModal = ({
   );
   const [taskColour, setTaskColour] = useState(updateTaskData.colour);
   const [selectedTasks, setSelectedTags] = useState<Array<Tag>>(getProcessedTags(updateTaskData.tags))
+  const [projectId , setProjectId] = useState<string>(updateTaskData.projectId)
   const { taskDispatch } = useTaskContext();
 
 
@@ -47,12 +49,33 @@ const UpdateEventModal = ({
   for (let i = 0; i <= startTime; i += 15) {
     disabledEndTimeOptions.push(i);
   }
+  console.log(updateTaskData)
 
+  async function updateTask(e : FormEvent) {
+    e.preventDefault();
+    console.log(projectId , '<-- before update called')
+    await taskDispatch({
+      type: "UPDATE_TASK",
+      payload: {
+        title: taskInfo.title,
+        description: taskInfo.description,
+        startTime,
+        endTime,
+        date: new Date(taskDate),
+        colour: taskColour,
+        id : updateTaskData.id,
+        tags : selectedTasks.map(({tag, type}) => ({tag , type})),
+        projectId : projectId
+      },
+    });
+    setShowUpdateTask(false);
+  }
+  
   return (
     <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up md:w-[75%] h-[90%] relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up md:w-[75%] min-h-[90%]relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
         <form 
           onSubmit={(e) => e.preventDefault()}
@@ -99,6 +122,7 @@ const UpdateEventModal = ({
             </div>
           </div>
           <TagsSelector selectedTags={selectedTasks} setSelectedTags={setSelectedTags} />
+          <ProjectSelector projectId={projectId} setProjectId={setProjectId} />
           <div className="flex items-center justify-items-center gap-4">
             Color: 
             {colourOptions.map((colour) => (
@@ -146,23 +170,7 @@ const UpdateEventModal = ({
                   : "bg-zinc-800"
               } text-white rounded-md`}
               disabled={!taskInfo.title}
-              onClick={(e) => {
-                e.preventDefault();
-                taskDispatch({
-                  type: "UPDATE_TASK",
-                  payload: {
-                    title: taskInfo.title,
-                    description: taskInfo.description,
-                    startTime,
-                    endTime,
-                    date: new Date(taskDate),
-                    colour: taskColour,
-                    id : updateTaskData.id,
-                    tags : selectedTasks.map(({tag, type}) => ({tag , type}))
-                  },
-                });
-                setShowUpdateTask(false);
-              }}
+              onClick={updateTask}
             >
               Save
             </button>

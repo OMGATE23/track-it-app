@@ -1,4 +1,4 @@
-import { Tag, Tags } from "./types";
+import { ProjectPriority, ProjectStatus, Tag, Tags } from "./types";
 
 export const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -104,3 +104,7 @@ export const TAGS: Record<typeof TAG_TYPES[number], Tag[]> = {
 
 
 export const TAG_TYPES : string[] = ['task',  'priority', 'status', 'department', 'time', 'efforts' , 'location' , 'ownership' , 'other'] as const
+
+export const projectStatus = Object.values(ProjectStatus)
+
+export const projectPriority = Object.values(ProjectPriority)

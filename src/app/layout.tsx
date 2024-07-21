@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthContextProvider from "@/context/AuthContext";
 import DateContextProvider from "@/context/DateContext";
 import TaskContextProvider from "@/context/TaskContext";
+import ProjectsContextProvider from "@/context/ProjectContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,9 +22,11 @@ export default function RootLayout({
     <html lang="en">
       <AuthContextProvider>
         <DateContextProvider>
-          <TaskContextProvider>
-            <body className={inter.className}>{children}</body>
-          </TaskContextProvider>
+          <ProjectsContextProvider>
+            <TaskContextProvider>
+              <body className={inter.className}>{children}</body>
+            </TaskContextProvider>
+          </ProjectsContextProvider>
         </DateContextProvider>
       </AuthContextProvider>
     </html>

@@ -99,6 +99,7 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
         const { payload } = action;
         const taskToUpdate = tasksState.tasks.find((task) => task.id === payload.id);
         if(taskToUpdate){
+          console.log({...taskToUpdate , ...payload})
           const result = await updateTask({...taskToUpdate , ...payload});
         if (!result.isError) {
           const updatedTasksResult = await getAllUserTasks();

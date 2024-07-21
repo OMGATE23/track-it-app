@@ -6,6 +6,7 @@ import { colourOptions } from "@/helpers/constansts";
 import DatePicker from "./DatePicker";
 import TagsSelector from "./TagsSelector";
 import { Tag } from "@/helpers/types";
+import ProjectSelector from "../projects/ProjectSelector";
 type CreateEventModalType = {
   setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
   createTaskData: CreateTaskType;
@@ -32,6 +33,8 @@ const CreateEventModal = ({
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
   const [taskColour, setTaskColour] = useState(colourOptions[0]);
   const { taskDispatch } = useTaskContext();
+  const [projectId , setProjectId] = useState<string>('')
+
   const handleStartTimeChange = (value: number) => {
     setStartTime(value);
     if (endTime <= value) {
@@ -54,7 +57,7 @@ const CreateEventModal = ({
         id="modal"
         className="fade-up md:w-[75%] h-[90%] relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
       >
-        <form className="flex flex-col items-start gap-8 w-[80%] mx-auto">
+        <form className="flex flex-col items-start gap-6 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">
             <input
               className="border-b w-[75%] py-2 text-xl focus:outline-none focus:border-blue-400 border-zinc-400"
@@ -96,6 +99,7 @@ const CreateEventModal = ({
               />
             </div>
           </div>
+          <ProjectSelector projectId={projectId} setProjectId={setProjectId} />
           <TagsSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
           <div className="flex items-center justify-items-center gap-4">
             <p>Color:</p>
@@ -154,7 +158,8 @@ const CreateEventModal = ({
                     endTime,
                     date: new Date(taskDate),
                     colour: taskColour,
-                    tags : selectedTags.map(({tag , type}) => ({tag , type}))
+                    tags : selectedTags.map(({tag , type}) => ({tag , type})),
+                    projectId : projectId
                   },
                 });
                 setShowCreateTask(false);

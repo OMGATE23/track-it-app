@@ -1,11 +1,11 @@
 'use client'
-import DatePicker from '@/calendar-components/DatePicker'
-import DropdownTime from '@/calendar-components/DropdownTime'
-import AIPageLoader from '@/components/AIPageLoader'
+import DatePicker from '@/components/calendar-components/DatePicker'
+import DropdownTime from '@/components/calendar-components/DropdownTime'
+import AIPageLoader from '@/components/ai/AIPageLoader'
 import Header from '@/components/Header'
 import Sparkles from '@/components/icons/Sparkles'
 import Sidebar from '@/components/Sidebar'
-import TaskTimeline from '@/components/TaskTimeline'
+import TaskTimeline from '@/components/ai/TaskTimeline'
 import { useDateContext } from '@/context/DateContext'
 import { AI_Tasks_Response, P_AI_Task } from '@/helpers/types'
 import { useAuthContext } from '@/hooks/useAuthContext'
@@ -164,7 +164,7 @@ const TrackItAiPage = () => {
             loading && <AIPageLoader/>
           }
           {
-            !loading && tasks && <TaskTimeline regenerate={getAITasks} tasks={tasks} />
+            !loading && tasks && <TaskTimeline centered regenerate={getAITasks} tasks={tasks} />
           }
           {
             error && <p>Error occured. Try again later.</p>

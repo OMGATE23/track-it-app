@@ -24,13 +24,13 @@ export type TypeDimensionAction =
 
 export interface Task {
   title: string;
-  description?: string;
+  description: string;
   date: Date;
   startTime: number;
   endTime: number;
   id: string;
   colour: string;
-  project : string;
+  projectId : string;
   tags : Resp_Tag[];
   userId : string;
 }
@@ -93,4 +93,38 @@ export interface P_AI_Task extends Resp_AI_Task {
 
 export interface AI_Tasks_Response {
   results : P_AI_Task[]
+}
+
+
+export interface IProject {
+  title : string,
+  description : string,
+  status : ProjectStatus
+  startDate : Date,
+  deadline : Date,
+  priority : ProjectPriority
+}
+
+export interface Resp_Project {
+  id : string,
+  title : string,
+  description : string,
+  status : ProjectStatus
+  startDate : Date,
+  deadline : Date,
+  priority : ProjectPriority,
+  userId : string
+}
+
+
+export enum ProjectStatus {
+  Active = 'active',
+  Done = 'done',
+  Paused = 'paused'
+}
+
+export enum ProjectPriority {
+  High = 'high',
+  Medium = 'medium',
+  Low = 'low'
 }
