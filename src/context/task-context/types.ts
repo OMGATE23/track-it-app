@@ -14,6 +14,7 @@ export type Action ={
         endTime: number;
         colour: string;
         tags : Resp_Tag[];
+        projectId : string
       };
     }
   | {
@@ -56,7 +57,8 @@ export type Action ={
         endTime: number;
         id: string;
         colour: string;
-        tags : Resp_Tag[]
+        tags : Resp_Tag[];
+        projectId : string
       };
     }
   | {

@@ -1,5 +1,5 @@
 import { MONTHS_FULL_NAME, TAGS } from "./constansts";
-import { Resp_Tag, Tag } from "./types";
+import { ProjectPriority, ProjectStatus, Resp_Tag, Tag } from "./types";
 
 export function sameDate(date1: Date, date2: Date): boolean {
   return (
@@ -66,4 +66,36 @@ export function getProcessedTags(tags : Resp_Tag[] = []) : Tag[] {
     TAGS[t.type].find(findTag => findTag.tag === t.tag)!
   ))
   return processedTags
+}
+
+export function priorityStyling(priority : ProjectPriority) : string {
+  if(priority === ProjectPriority.High){
+    return 'bg-red-600'
+  }
+
+  if(priority === ProjectPriority.Low){
+    return 'bg-green-500'
+  }
+
+  if(priority === ProjectPriority.Medium){
+    return 'bg-yellow-400'
+  }
+
+  return ''
+}
+
+export function statusStyling(status : ProjectStatus) : string {
+  if(status === ProjectStatus.Active){
+    return 'bg-green-500'
+  }
+
+  if(status === ProjectStatus.Done) {
+    return 'bg-zinc-400'
+  }
+
+  if(status === ProjectStatus.Paused) {
+    return 'bg-orange-400'
+  }
+
+  return ''
 }

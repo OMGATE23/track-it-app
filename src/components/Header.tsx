@@ -13,7 +13,7 @@ const Header = () => {
     if(!authIsReady) return <></>
   return (
     user ? (
-        <header className='border-b border-zinc-200 h-16 flex items-center justify-between p-4'>
+        <header className=' h-16 flex items-center justify-between p-4'>
             <h1 className='text-xl font-semibold'>TrackIt</h1>
             <button className='hover:bg-zinc-100 transition-all duration-75 px-2 py-1 rounded-md' onClick={logout} >Logout</button>
         </header>

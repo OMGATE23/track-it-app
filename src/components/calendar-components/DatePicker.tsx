@@ -4,10 +4,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import Calendar from './Calendar'
 
 interface Props {
-  className ?: string 
+  className ?: string
 }
 
-const DatePicker = ({className} : Props) => {
+const DatePicker = ({className } : Props) => {
   const {state} = useDateContext()
   const [showCalendar , setShowCalendar] = useState(false)
     
@@ -27,7 +27,7 @@ const DatePicker = ({className} : Props) => {
   }, []);
   
   return (
-    <div className={className + ' relative'} ref = {calendarRef}>
+    <div ref = {calendarRef} className={className}>
       <div 
         className='outline w-64 outline-1 outline-zinc-200 py-1 px-4 rounded-md shadow-sm relative cursor-pointer flex items-center gap-2'
         onClick={() => setShowCalendar(prev => !prev)}

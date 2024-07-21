@@ -1,12 +1,10 @@
 'use client'
-import Header from '@/common-components/Header'
-import DisplayView from '@/calendar-components/DisplayView'
+import Header from '@/components/Header'
+import DisplayView from '@/components/calendar-components/DisplayView'
 import { useAuthContext } from '@/hooks/useAuthContext'
-
-import useFirestore from '@/hooks/useFirestore'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import Sidebar from '@/common-components/Sidebar'
+import Sidebar from '@/components/Sidebar'
 
 const App  = () => {
   const {state} = useAuthContext()
@@ -19,7 +17,7 @@ const App  = () => {
     return <></>
   }
   return (
-    <div className='h-[100vh] h-[100dvh] '>
+    <div className='h-[100vh]'>
       <Header/>
       <div className='flex'>
         <Sidebar/>
