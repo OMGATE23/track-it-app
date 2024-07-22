@@ -7,10 +7,14 @@ import Sparkles from '@/components/icons/Sparkles'
 import Sidebar from '@/components/Sidebar'
 import TaskTimeline from '@/components/ai/TaskTimeline'
 import { useDateContext } from '@/context/DateContext'
-import { AI_Tasks_Response, P_AI_Task } from '@/helpers/types'
+import { AI_Tasks_Response, P_AI_Task, ProjectPriority } from '@/helpers/types'
 import { useAuthContext } from '@/hooks/useAuthContext'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import { colourOptions, projectPriority } from '@/helpers/constansts'
+import { useTaskContext } from '@/context/TaskContext'
+import { useProjectsContext } from '@/context/ProjectContext'
+import PrioritySelector from '@/components/projects/PrioritySelector'
 
 const TrackItAiPage = () => {
   const {state} = useAuthContext()
@@ -27,7 +31,9 @@ const TrackItAiPage = () => {
   const [tasks, setTasks] = useState<P_AI_Task[] | null>(null)
   const [error , setError] = useState<boolean>(false)
   const [loading , setLoading] = useState<boolean>(false)
-
+  const {taskDispatch} = useTaskContext()
+  const {projectsDispatch, projectsState} = useProjectsContext()
+  const [priority , setPriority] = useState<ProjectPriority>(ProjectPriority.Low)
   if(!state.authIsReady){return <></>}
 
   if(!state.user){
@@ -62,6 +68,46 @@ const TrackItAiPage = () => {
     } catch(err){
       console.log(err)
       setError(true)
+    }
+  }
+
+  async function addTasksToTimer(){
+    let startDate = new Date(dateState.displayDate)
+    const projectId = await projectsDispatch({
+      type : 'ADD_PROJECT',
+      payload : {
+      title: title,
+      description: description,
+      startDate: startDate,
+      deadline: new Date(startDate.getTime() + noOfDays * 24 * 60 * 60 * 1000),
+      priority: priority,
+      }
+    })
+    if(tasks){
+      for(let i = 0 ; i < tasks.length ; i++){
+        console.log('happening')
+        await taskDispatch({
+          type : 'ADD_TASK',
+          payload : {
+            title : tasks[i].title,
+            description : tasks[i].description,
+            date : new Date(tasks[i].date),
+            startTime : tasks[i].startTime,
+            endTime : tasks[i].endTime,
+            tags : [],
+            colour : colourOptions[0],
+            projectId : projectId || 'none'
+          }
+        })
+        console.log('added to tasks')
+      }
+
+      if(projectId){
+        router.push(`/projects/${projectId}`)
+      } else {
+        router.push('/timer')
+      }
+      
     }
   }
 
@@ -158,13 +204,33 @@ const TrackItAiPage = () => {
                   Generate
                 </button>
               </div>
+              <PrioritySelector priority={priority} setPriority={setPriority}/>
             </div>
           </div>
           {
             loading && <AIPageLoader/>
           }
           {
-            !loading && tasks && <TaskTimeline centered regenerate={getAITasks} tasks={tasks} />
+            !loading && tasks && (
+              <>
+                <TaskTimeline centered tasks={tasks} />
+                <div className='flex items-center gap-6 justify-center my-8'>
+                  <button 
+                    onClick={getAITasks}
+                    className='py-2 px-4 rounded-md outline outline-1 flex gap-2 hover:bg-zinc-50 transition-all duration-200'
+                  >
+                    <Sparkles/>
+                    Regenerate
+                  </button>
+                  <button
+                    onClick={() => {addTasksToTimer()}} 
+                    className='py-2 px-4 text-white bg-zinc-900 hover:bg-zinc-950 transition-all duration-200 rounded-md'>
+                    Add to Calendar
+                  </button>
+                </div>
+              </>
+              
+            )
           }
           {
             error && <p>Error occured. Try again later.</p>

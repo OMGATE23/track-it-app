@@ -6,7 +6,6 @@ const Sidebar = () => {
   const pathname = usePathname()
 
   function sameRoute(route : string) : boolean {
-    console.log(pathname , pathname === route)
     return pathname === route
   }
   return (

@@ -128,3 +128,9 @@ export enum ProjectPriority {
   Medium = 'medium',
   Low = 'low'
 }
+
+export enum TaskStatus {
+  Completed = 'completed',
+  Pending = 'pending',
+  Overdue = 'overdue'
+}

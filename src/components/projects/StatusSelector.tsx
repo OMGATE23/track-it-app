@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { projectStatus, TAGS } from '@/helpers/constansts'
 import { ProjectStatus, Tag, Tags } from '@/helpers/types'
 import { useProjectsContext } from '@/context/ProjectContext'
+import { statusStyling } from '@/helpers/helper'
 
 interface Props {
   status : ProjectStatus,
@@ -28,19 +29,19 @@ const StatusSelector = ({status , setStatus} : Props) => {
     };
   }, []);
   return (
-    <div ref={componentRef} className='relative w-[80%] flex items-start gap-2'>
+    <div ref={componentRef} className='relative w-fit flex items-start gap-2'>
       <div className='flex items-center gap-4 '>
         status: 
       <button type='button' onClick={(e) => {
         e.preventDefault()
         setOpenTagsDisplay(prev => !prev)
-      }} className='px-4 py-1  outline outline-1 outline-zinc-200 rounded-md shadow-sm' >
-        {status}
+      }} className='outline outline-1 outline-zinc-700 rounded-md  shadow-sm' >
+        <span className={`block w-full h-full px-4 py-1 rounded-md ${statusStyling(status)}`}>{status}</span>
       </button>
       </div>
         {openTagsDisplay && (
           
-            <div className='px-2 py-2 mt-2 absolute top-8 outline outline-1 outline-zinc-200 rounded-md z-[20] bg-white flex flex-col mx-auto gap-2 max-h-[450px] overflow-y-auto'>
+            <div className='px-2 py-2 mt-2 absolute top-8 right-0 outline outline-1 outline-zinc-200 rounded-md z-[20] bg-white flex flex-col mx-auto gap-2 max-h-[450px] overflow-y-auto'>
             {
               projectStatus.map(status => (
                 <div 

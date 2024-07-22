@@ -5,14 +5,14 @@ import { Action } from "./task-context/types";
 import useFirestore from "@/hooks/useFirestore";
 import { useAuthContext } from "@/hooks/useAuthContext";
 
-export type TaskState = {
+export type TaskContextState = {
   tasks: Task[];
   loading : boolean;
   error? : string;
 };
 
 export type TaskContextType = {
-  tasksState: TaskState;
+  tasksState: TaskContextState;
   taskDispatch: (action : Action) => Promise<void>;
 };
 
@@ -48,7 +48,7 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
     fetchTasks();
   }, [userState.user]);
 
-  function reducer(state: TaskState, action: Action): TaskState {
+  function reducer(state: TaskContextState, action: Action): TaskContextState {
     switch (action.type) {
       case "SET_TASKS" :  {
         return ({
@@ -82,7 +82,7 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
       case "ADD_TASK": {
         const { payload: task } = action;
         
-        const result = await addTask(task);
+        const result = await addTask({...task});
         if (!result.isError) {
           const updatedTasksResult = await getAllUserTasks();
           if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {

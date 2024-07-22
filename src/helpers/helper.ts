@@ -70,7 +70,7 @@ export function getProcessedTags(tags : Resp_Tag[] = []) : Tag[] {
 
 export function priorityStyling(priority : ProjectPriority) : string {
   if(priority === ProjectPriority.High){
-    return 'bg-red-600'
+    return 'bg-red-500'
   }
 
   if(priority === ProjectPriority.Low){
@@ -78,7 +78,7 @@ export function priorityStyling(priority : ProjectPriority) : string {
   }
 
   if(priority === ProjectPriority.Medium){
-    return 'bg-yellow-400'
+    return 'bg-yellow-300'
   }
 
   return ''

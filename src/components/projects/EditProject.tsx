@@ -13,8 +13,6 @@ const EditProject = ({setShow , project} : Props) => {
   const {projectsDispatch} = useProjectsContext()
   const [title , setTitle] = useState(project.title)
   const [description , setDescription] = useState(project.description)
-  const [date , setDate] = useState<Date>(new Date(project.startDate))
-  const [deadline , setDeadline] = useState<Date>(new Date(project.deadline))
   const [priority , setPriority] = useState<ProjectPriority>(project.priority)
   const [status , setStatus] = useState<ProjectStatus>(project.status)
 
@@ -31,9 +29,7 @@ const EditProject = ({setShow , project} : Props) => {
       payload : {
         id : project.id,
         title,
-        deadline,
         description,
-        startDate : date,
         priority,
         status
       }
@@ -53,24 +49,6 @@ const EditProject = ({setShow , project} : Props) => {
               value={title} 
               onChange={e => setTitle(e.target.value)} 
 
-            />
-          </label>
-          <label className='flex items-center  gap-2'>
-            Start date: 
-            <input 
-              type='date' 
-              className='outline outline-1 outline-zinc-200 py-1 px-3 rounded-md shadow-sm' 
-              value={formatDateForInput(date)} 
-              onChange={e => setDate(new Date(e.target.value))} 
-            />
-          </label>
-          <label className='flex items-center  gap-2'>
-            Deadline: 
-            <input 
-              type='date' 
-              className='outline outline-1 outline-zinc-200 py-1 px-3 rounded-md shadow-sm' 
-              value={formatDateForInput(deadline)} 
-              onChange={e => setDeadline(new Date(e.target.value))} 
             />
           </label>
           <PrioritySelector priority={priority} setPriority={setPriority}/>

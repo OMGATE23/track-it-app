@@ -13,7 +13,7 @@ export type ProjectsState = {
 
 export type ProjectsContextType = {
   projectsState: ProjectsState;
-  projectsDispatch: (action : Action) => Promise<void>;
+  projectsDispatch: (action : Action) => Promise<any>;
 };
 
 export const ProjectsContext = createContext<ProjectsContextType>({
@@ -98,10 +98,12 @@ const ProjectsContextProvider = ({ children }: { children: ReactNode }) => {
           } else {
             projectsDispatch({ type: "SET_ERROR", payload: updatedProjectsResult.error || "Unknown error occurred" });
           }
+          return result.id
         } else {
           projectsDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
         }
         break;
+        
       }
       case "UPDATE_PROJECT": {
         const { payload } = action;

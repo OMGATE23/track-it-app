@@ -9,34 +9,13 @@ import { useRouter } from 'next/navigation'
 
 interface Props {
   tasks : P_AI_Task[]
-  regenerate : (() => Promise<void> ) | null
   centered ?: boolean
 }
 
-const TaskTimeline = ({tasks , regenerate, centered} : Props) => {
+const TaskTimeline = ({tasks , centered} : Props) => {
   const {taskDispatch} = useTaskContext()
   const router = useRouter()
 
-  async function addTasksToTimer(){
-    for(let i = 0 ; i < tasks.length ; i++){
-      console.log('happening')
-      await taskDispatch({
-        type : 'ADD_TASK',
-        payload : {
-          title : tasks[i].title,
-          description : tasks[i].description,
-          date : new Date(tasks[i].date),
-          startTime : tasks[i].startTime,
-          endTime : tasks[i].endTime,
-          tags : [],
-          colour : colourOptions[0],
-          projectId : 'none'
-        }
-      })
-      console.log('added to tasks')
-    }
-    router.push('/timer')
-  }
   return (
     <div className={` w-fit ${centered && 'mx-auto'} fade-in-pop`}>
       {
@@ -54,20 +33,6 @@ const TaskTimeline = ({tasks , regenerate, centered} : Props) => {
           </div>
         ))
       }
-      {regenerate && <div className='flex items-center gap-6 justify-center my-8'>
-        <button 
-          onClick={regenerate}
-          className='py-2 px-4 rounded-md outline outline-1 flex gap-2 hover:bg-zinc-50 transition-all duration-200'
-        >
-          <Sparkles/>
-          Regenerate
-        </button>
-        <button
-          onClick={() => {addTasksToTimer()}} 
-          className='py-2 px-4 text-white bg-zinc-900 hover:bg-zinc-950 transition-all duration-200 rounded-md'>
-          Add to Calendar
-        </button>
-      </div>}
     </div>
   )
 }

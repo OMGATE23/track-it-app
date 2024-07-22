@@ -1,8 +1,7 @@
 import { db } from "../firebase/config";
-import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, query, QuerySnapshot, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDocs, query, QuerySnapshot, updateDoc, where } from "firebase/firestore";
 import { useAuthContext } from "./useAuthContext";
-import { IProject, Resp_Project, Task } from "@/helpers/types";
-import { Action } from "@/context/task-context/types";
+import { IProject, Resp_Project, Task, TaskStatus } from "@/helpers/types";
 
 type ADD_TASK = {
     title: string;
@@ -11,7 +10,7 @@ type ADD_TASK = {
     startTime: number;
     endTime: number;
     colour: string;
-    projectId : string
+    projectId : string;
   };
 
 

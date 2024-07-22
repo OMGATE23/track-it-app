@@ -1,4 +1,4 @@
-import { Resp_Tag, Tag, Task } from "@/helpers/types";
+import { Resp_Tag, Tag, Task, TaskStatus } from "@/helpers/types";
 
 export type TaskState = {
     tasks: Task[];
@@ -14,7 +14,7 @@ export type Action ={
         endTime: number;
         colour: string;
         tags : Resp_Tag[];
-        projectId : string
+        projectId : string;
       };
     }
   | {
@@ -58,7 +58,7 @@ export type Action ={
         id: string;
         colour: string;
         tags : Resp_Tag[];
-        projectId : string
+        projectId : string;
       };
     }
   | {
