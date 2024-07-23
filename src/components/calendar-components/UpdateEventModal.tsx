@@ -53,7 +53,6 @@ const UpdateEventModal = ({
 
   async function updateTask(e : FormEvent) {
     e.preventDefault();
-    console.log(projectId , '<-- before update called')
     await taskDispatch({
       type: "UPDATE_TASK",
       payload: {
