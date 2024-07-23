@@ -27,9 +27,9 @@ const ProjectSelector = ({projectId , setProjectId} : Props) => {
     };
   }, []);
   return (
-    <div ref={componentRef} className='relative w-[80%] flex items-start gap-2'>
-      <div className='flex items-center gap-4 '>
-        Project: 
+    <div ref={componentRef} className='relative w-fit flex items-start gap-2'>
+      <div className='flex items-center gap-3 '>
+        Project
       <button type='button' onClick={(e) => {
         e.preventDefault()
         setOpenTagsDisplay(prev => !prev)
@@ -39,7 +39,7 @@ const ProjectSelector = ({projectId , setProjectId} : Props) => {
       </div>
         {openTagsDisplay && (
           
-            <div className='px-2 py-2 mt-2 absolute top-8 outline outline-1 outline-zinc-200 rounded-md z-[20] bg-white flex flex-col mx-auto gap-2 max-h-[450px] overflow-y-auto'>
+            <div className='px-2 py-2 mt-2 min-w-[160px] absolute top-8 right-0 outline outline-1 outline-zinc-200 rounded-md z-[20] bg-white flex flex-col mx-auto gap-2 max-h-[320px] overflow-y-auto'>
             {
               projectsState.projects.map(project => (
                 <div 
