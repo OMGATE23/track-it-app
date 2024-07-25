@@ -1,13 +1,13 @@
 "use client";
 import Header from "@/components/Header";
-import DisplayView from "@/components/calendar-components/DisplayView";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Sidebar from "@/components/Sidebar";
+import AnalyticsPage from "@/components/analytics/AnalyticsPage";
 import Footer from "@/components/Footer";
 
-const App = () => {
+const Analytics = () => {
   const { state } = useAuthContext();
   const router = useRouter();
 
@@ -20,15 +20,15 @@ const App = () => {
     return <></>;
   }
   return (
-    <div className="h-[100vh]">
+    <div className="min-h-[100vh]">
       <Header />
       <div className="flex">
         <Sidebar />
-        <DisplayView />
+        <AnalyticsPage />
       </div>
       <Footer />
     </div>
   );
 };
 
-export default App;
+export default Analytics;

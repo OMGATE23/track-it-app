@@ -24,7 +24,9 @@ export default function RootLayout({
         <DateContextProvider>
           <ProjectsContextProvider>
             <TaskContextProvider>
-              <body className={inter.className}>{children}</body>
+              <body className={inter.className + " min-h-[100vh]"}>
+                {children}
+              </body>
             </TaskContextProvider>
           </ProjectsContextProvider>
         </DateContextProvider>

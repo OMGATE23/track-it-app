@@ -108,3 +108,25 @@ export const TAG_TYPES : string[] = ['task',  'priority', 'status', 'department'
 export const projectStatus = Object.values(ProjectStatus)
 
 export const projectPriority = Object.values(ProjectPriority)
+
+export const tailwindColors: Record<string, string> = {
+  "bg-blue-500": "#3b82f6",
+  "bg-lime-500": "#84cc16",
+  "bg-fuchsia-500": "#d946ef",
+  "bg-rose-500": "#f43f5e",
+  "bg-amber-500": "#f59e0b",
+  "bg-violet-500": "#8b5cf6",
+  "bg-teal-500": "#14b8a6",
+  "bg-sky-500": "#0ea5e9",
+  "bg-orange-500": "#f97316",
+  "bg-red-500": "#ef4444",
+  "bg-yellow-500": "#eab308",
+  "bg-green-500": "#22c55e",
+  "bg-gray-500": "#6b7280",
+  "bg-emerald-500": "#10b981",
+  "bg-purple-500": "#a855f7",
+  "bg-indigo-500": "#6366f1",
+  "bg-pink-500": "#ec4899",
+  "bg-black": "#000000",
+  "bg-white": "#ffffff"
+};

@@ -40,6 +40,7 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
       const result = await getAllUserTasks();
       if (!result.errorOccured && result.tasks) {
         taskDispatch({ type: "SET_TASKS", payload: result.tasks });
+        taskDispatch({type : "SET_ERROR", payload : ''})
       } else {
         taskDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
       }
@@ -87,6 +88,7 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
           const updatedTasksResult = await getAllUserTasks();
           if (!updatedTasksResult.errorOccured && updatedTasksResult.tasks) {
             taskDispatch({ type: "SET_TASKS", payload: updatedTasksResult.tasks });
+            taskDispatch({type : "SET_ERROR", payload : ''})
           } else {
             taskDispatch({ type: "SET_ERROR", payload: updatedTasksResult.error || "Unknown error occurred" });
           }

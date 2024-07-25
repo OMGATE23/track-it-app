@@ -41,6 +41,7 @@ const ProjectsContextProvider = ({ children }: { children: ReactNode }) => {
       const result = await getAllUserProjects();
       if (!result.errorOccured && result.projects) {
         projectsDispatch({ type: "SET_PROJECTS", payload: result.projects });
+        projectsDispatch({type : "SET_ERROR", payload : ''})
       } else {
         projectsDispatch({ type: "SET_ERROR", payload: result.error || "Unknown error occurred" });
       }

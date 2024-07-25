@@ -7,7 +7,7 @@ interface Props {
   stroke?: string;
 }
 
-const Stop = (props: Props) => {
+const MenuIcon = (props: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -20,10 +20,10 @@ const Stop = (props: Props) => {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z"
+        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
       />
     </svg>
   );
 };
 
-export default Stop;
+export default MenuIcon;

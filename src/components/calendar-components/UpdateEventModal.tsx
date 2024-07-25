@@ -18,7 +18,7 @@ type TaskInfo = {
 
 const UpdateEventModal = ({
   setShowUpdateTask,
-  updateTaskData
+  updateTaskData,
 }: UpdateEventModalType) => {
   const [taskInfo, setTaskInfo] = useState<TaskInfo>({
     title: updateTaskData.title,
@@ -30,10 +30,11 @@ const UpdateEventModal = ({
     updateTaskData.date.toISOString().split("T")[0]
   );
   const [taskColour, setTaskColour] = useState(updateTaskData.colour);
-  const [selectedTasks, setSelectedTags] = useState<Array<Tag>>(getProcessedTags(updateTaskData.tags))
-  const [projectId , setProjectId] = useState<string>(updateTaskData.projectId)
+  const [selectedTasks, setSelectedTags] = useState<Array<Tag>>(
+    getProcessedTags(updateTaskData.tags)
+  );
+  const [projectId, setProjectId] = useState<string>(updateTaskData.projectId);
   const { taskDispatch } = useTaskContext();
-
 
   const handleStartTimeChange = (value: number) => {
     setStartTime(value);
@@ -49,9 +50,9 @@ const UpdateEventModal = ({
   for (let i = 0; i <= startTime; i += 15) {
     disabledEndTimeOptions.push(i);
   }
-  console.log(updateTaskData)
+  console.log(updateTaskData);
 
-  async function updateTask(e : FormEvent) {
+  async function updateTask(e: FormEvent) {
     e.preventDefault();
     await taskDispatch({
       type: "UPDATE_TASK",
@@ -62,26 +63,27 @@ const UpdateEventModal = ({
         endTime,
         date: new Date(taskDate),
         colour: taskColour,
-        id : updateTaskData.id,
-        tags : selectedTasks.map(({tag, type}) => ({tag , type})),
-        projectId : projectId
+        id: updateTaskData.id,
+        tags: selectedTasks.map(({ tag, type }) => ({ tag, type })),
+        projectId: projectId,
       },
     });
     setShowUpdateTask(false);
   }
-  
+
   return (
     <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up md:w-[75%] min-h-[90%]relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-8"
+        className="fade-up w-[90%] md:w-[75%] min-h-[90%] relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
       >
-        <form 
+        <form
           onSubmit={(e) => e.preventDefault()}
-          className="flex flex-col items-start gap-8 w-[80%] mx-auto">
-          <div className="flex flex-col w-full gap-4">
+          className="flex flex-col items-start gap-8 w-[80%] mx-auto"
+        >
+          <div className="flex flex-col items-center md:items-start w-full gap-4">
             <input
-              className="border-b w-[75%] py-2 text-xl focus:outline-none focus:border-blue-400 border-zinc-400"
+              className="border-b w-full md:w-[75%] py-2 text-xl focus:outline-none focus:border-blue-400 border-zinc-400"
               type="text"
               required
               autoFocus
@@ -97,8 +99,8 @@ const UpdateEventModal = ({
               }}
             />
           </div>
-          
-          <div className="flex items-center gap-4">
+
+          <div className="flex w-full flex-col md:flex-row items-center gap-4">
             <input
               type="date"
               onChange={(e) => {
@@ -120,47 +122,52 @@ const UpdateEventModal = ({
               />
             </div>
           </div>
-          <TagsSelector selectedTags={selectedTasks} setSelectedTags={setSelectedTags} />
+          <TagsSelector
+            selectedTags={selectedTasks}
+            setSelectedTags={setSelectedTags}
+          />
           <ProjectSelector projectId={projectId} setProjectId={setProjectId} />
-          <div className="flex items-center justify-items-center gap-4">
-            Color: 
-            {colourOptions.map((colour) => (
-              <label key={colour} className={`w-6 h-6 ${colour} rounded-lg `}>
-                {colour === taskColour && (
-                  <span className="text-white h-full flex justify-center items-center">
-                    <img
-                      className="text-white"
-                      width={20}
-                      src="/assets/icons/check.svg"
-                    />
-                  </span>
-                )}
-                <input
-                  className={`w-6 h-6 relative opacity-0`}
-                  type="radio"
-                  name="colour"
-                  checked = {colour === taskColour}
-                  onChange={() => setTaskColour(colour)}
-                />
-              </label>
-            ))}
+          <div className="flex w-full md:items-center gap-4">
+            Color:
+            <div className="grid md:flex md:items-center grid-cols-4 gap-4">
+              {colourOptions.map((colour) => (
+                <label key={colour} className={`w-6 h-6 ${colour} rounded-lg `}>
+                  {colour === taskColour && (
+                    <span className="text-white h-full flex justify-center items-center">
+                      <img
+                        className="text-white"
+                        width={20}
+                        src="/assets/icons/check.svg"
+                      />
+                    </span>
+                  )}
+                  <input
+                    className={`w-6 h-6 relative opacity-0`}
+                    type="radio"
+                    name="colour"
+                    checked={colour === taskColour}
+                    onChange={() => setTaskColour(colour)}
+                  />
+                </label>
+              ))}
+            </div>
           </div>
           <textarea
-              rows={10}
-              wrap = 'hard'
-              placeholder="Description"
-              className="bg-zinc-100 font-[300] p-4 rounded-md w-full py-2 focus:outline-none resize-none placeholder:text-zinc-600"
-              value = {taskInfo.description}
-              onChange={(e) => {
-                setTaskInfo((prev) => {
-                  return {
-                    ...prev,
-                    description: e.target.value,
-                  };
-                });
-              }}
-            />
-          <div className="flex items-center gap-6">
+            rows={10}
+            wrap="hard"
+            placeholder="Description"
+            className="bg-zinc-100 font-[300] p-4 rounded-md w-full py-2 focus:outline-none resize-none placeholder:text-zinc-600"
+            value={taskInfo.description}
+            onChange={(e) => {
+              setTaskInfo((prev) => {
+                return {
+                  ...prev,
+                  description: e.target.value,
+                };
+              });
+            }}
+          />
+          <div className="flex w-full items-center justify-center md:justify-start gap-6">
             <button
               type="submit"
               className={`w-fit py-1 px-6 text-lg ${
