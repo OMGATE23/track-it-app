@@ -58,7 +58,7 @@ const CreateEventModal = ({
     >
       <div
         id="modal"
-        className="fade-up w-[90%] md:w-[75%] h-[90%] relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
+        className="fade-up w-[90%] md:w-[75%] h-[90%] overflow-y-auto relative z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
       >
         <form className="flex flex-col items-start gap-6 w-[80%] mx-auto">
           <div className="flex flex-col w-full gap-4">

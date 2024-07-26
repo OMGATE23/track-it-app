@@ -3,14 +3,16 @@ import { useProjectsContext } from "@/context/ProjectContext";
 import { useTaskContext } from "@/context/TaskContext";
 import { summarizeProjects } from "@/helpers/helper";
 import React from "react";
-import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import DatePicker from "../calendar-components/DatePicker";
 import TasksByProjects from "./TasksByProjects";
+import { tailwindColors } from "@/helpers/constansts";
 
 const ProjectsAnalysis = () => {
   const { projectsState } = useProjectsContext();
   const { tasksState } = useTaskContext();
 
+  const colors = Object.values(tailwindColors);
   const projectsSummary = summarizeProjects(
     tasksState.tasks,
     projectsState.projects
@@ -48,7 +50,11 @@ const ProjectsAnalysis = () => {
                   cy="50%"
                   outerRadius={100}
                   fill="#059669"
-                />
+                >
+                  {projectsSummary.map((_, i) => (
+                    <Cell key={_.projectId} fill={colors[i]} />
+                  ))}
+                </Pie>
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -70,7 +76,11 @@ const ProjectsAnalysis = () => {
                   cy="50%"
                   outerRadius={100}
                   fill="#7c3aed"
-                />
+                >
+                  {projectsSummary.map((_, i) => (
+                    <Cell key={_.projectId} fill={colors[i]} />
+                  ))}
+                </Pie>
               </PieChart>
             </ResponsiveContainer>
           </div>

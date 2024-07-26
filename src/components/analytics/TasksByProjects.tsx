@@ -34,6 +34,7 @@ const TasksByProjects = () => {
   return (
     <div className="flex flex-col gap-8 mx-auto w-[90%] mb-16">
       <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+        <h2 className="font-[500] text-xl">Tasks per day</h2>
         <DatePicker />
         <ProjectSelector projectId={projectId} setProjectId={setProjectId} />
       </div>

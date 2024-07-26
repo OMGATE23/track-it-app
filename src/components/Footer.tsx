@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="w-full p-8 bg-white footer-bg-backdrop">
+    <div className="w-full p-8 bg-white footer-bg-backdrop ">
       <p className="text-center">
         Created by{" "}
         <Link className="text-green-800" href="https://github.com/OMGATE23">

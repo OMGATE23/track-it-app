@@ -1,7 +1,7 @@
 "use client";
 import { useDateContext } from "@/context/DateContext";
 import { numberToTime, sameDate } from "@/helpers/helper";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DayView from "./DayView";
 import CreateEventModal from "../CreateEventModal";
 import { Task } from "@/helpers/types";
@@ -14,15 +14,16 @@ export type CreateTaskType = {
 };
 
 const WeekGrid = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const { state: dateState } = useDateContext();
   const [showCreateTask, setShowCreateTask] = useState<boolean>(false);
   const [createTaskData, setCreateTaskData] = useState<CreateTaskType>({
     start: 0,
     taskDate: dateState.displayDate,
   });
-  const [showUpdateTask , setShowUpdateTask] = useState<boolean>(false)
-  const [updateTaskData, setUpdateTaskData] = useState<Task>()
-  const [showInfo , setShowInfo] = useState(false)
+  const [showUpdateTask, setShowUpdateTask] = useState<boolean>(false);
+  const [updateTaskData, setUpdateTaskData] = useState<Task>();
+  const [showInfo, setShowInfo] = useState(false);
   function getDisplayWeek(): Date[] {
     const dayOfWeek = dateState.displayDate.getDay();
     const daysInSameWeek = [];
@@ -54,18 +55,29 @@ const WeekGrid = () => {
   }
   let timeIntervals = getTimeIntervals();
   let displayWeek = getDisplayWeek();
+
+  const currentHour = new Date().getHours();
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: currentHour * 3.5 * 16,
+        behavior: "smooth",
+      });
+    }
+  }, [currentHour]);
   return (
     <>
-      <div className="calendar-display flex items-start max-h-[100%] overflow-auto">
+      <div
+        ref={containerRef}
+        className="calendar-display flex items-start max-h-[100%] overflow-auto"
+      >
         <div className="w-32 text-xs text-zinc-700">
           <div className="h-14 py-2 px-1 flex justify-end items-end">
             GMT + {numberToTime(new Date(Date.now()).getTimezoneOffset())}
           </div>
           {Array.from({ length: 24 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-32 h-16 text-right px-1 relative "
-            >
+            <div key={i} className="w-32 h-16 text-right px-1 relative ">
               {numberToTime(i * 60)}
             </div>
           ))}
@@ -75,7 +87,7 @@ const WeekGrid = () => {
             setCreateTaskData={setCreateTaskData}
             setShowCreateTask={setShowCreateTask}
             setShowInfo={setShowInfo}
-            setUpdateTaskData = {setUpdateTaskData}
+            setUpdateTaskData={setUpdateTaskData}
             key={day.getTime()}
             day={day}
             timeIntervals={timeIntervals}
@@ -89,13 +101,20 @@ const WeekGrid = () => {
           createTaskData={createTaskData}
         />
       )}
-      {
-        showUpdateTask && updateTaskData && <UpdateEventModal setShowUpdateTask={setShowUpdateTask} updateTaskData={updateTaskData} />
-      }
+      {showUpdateTask && updateTaskData && (
+        <UpdateEventModal
+          setShowUpdateTask={setShowUpdateTask}
+          updateTaskData={updateTaskData}
+        />
+      )}
 
-      {
-        showInfo && updateTaskData && <TaskInfo setShowInfo={setShowInfo} setShowUpdateModal={setShowUpdateTask} task={updateTaskData} />
-      }
+      {showInfo && updateTaskData && (
+        <TaskInfo
+          setShowInfo={setShowInfo}
+          setShowUpdateModal={setShowUpdateTask}
+          task={updateTaskData}
+        />
+      )}
     </>
   );
 };

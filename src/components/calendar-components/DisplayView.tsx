@@ -11,7 +11,7 @@ const DisplayView = () => {
       <div className="flex relative flex-col gap-8 justify-center items-center">
         <DatePicker />
       </div>
-      <div className="outline outline-1 h-[70%] overflow-x-auto w-[90%] md:w-full md:overflow-x-hidden outline-zinc-100 rounded-sm shadow-sm">
+      <div className="outline outline-1 h-[70%] overflow-x-auto  w-[90%] md:w-full md:overflow-x-hidden outline-zinc-100 rounded-sm shadow-sm">
         <WeekGrid />
       </div>
     </main>
