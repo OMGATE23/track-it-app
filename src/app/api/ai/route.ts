@@ -1,59 +1,66 @@
 import { AIRequestData, P_AI_Task, Raw_AI_Task } from "@/helpers/types";
-import { FunctionDeclarationSchemaType, GoogleGenerativeAI, ResponseSchema } from "@google/generative-ai"
-import { NextResponse } from "next/server"
+import {
+  FunctionDeclarationSchemaType,
+  GoogleGenerativeAI,
+  ResponseSchema,
+} from "@google/generative-ai";
+import { NextResponse } from "next/server";
 
-
-export async function POST(request : Request){
+export async function POST(request: Request) {
   try {
-    let requestData : AIRequestData = await request.json()
-  let genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string)
-  let model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: getResponseSchema(requestData.letAIDecideTime)
-      
-    }
-  });
-  
-  let prompt = generatePromptFromSchema(requestData);
-  let startDay = new Date(requestData.startDay)
-  let result = await model.generateContent(prompt)
-  let tasks : Raw_AI_Task[] = JSON.parse(result.response.text())
-  console.log(JSON.parse(result.response.text()))
-  let processedTasks : P_AI_Task[] =  tasks.map((task , i) => {
-    const newDate = new Date(startDay)
-    newDate.setDate(startDay.getDate() + i)
-    if(!requestData.letAIDecideTime){
-      task.startTime = requestData.startTime;
-      task.endTime = requestData.endTime;
-    }
+    let requestData: AIRequestData = await request.json();
+    let genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+    let model = genAI.getGenerativeModel({
+      model: "gemini-1.5-pro",
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: getResponseSchema(requestData.letAIDecideTime),
+      },
+    });
 
-    if(task.startTime > 1440 || task.endTime > 1440){
-      task.startTime = requestData.startTime;
-      task.endTime = requestData.endTime;
-    }
+    let prompt = generatePromptFromSchema(requestData);
+    let startDay = new Date(requestData.startDay);
+    let result = await model.generateContent(prompt);
+    let tasks: Raw_AI_Task[] = JSON.parse(result.response.text());
+    let processedTasks: P_AI_Task[] = tasks.map((task, i) => {
+      const newDate = new Date(startDay);
+      newDate.setDate(startDay.getDate() + i);
+      if (!requestData.letAIDecideTime) {
+        task.startTime = requestData.startTime;
+        task.endTime = requestData.endTime;
+      }
 
-    return {...task , date : newDate}
-  } 
-) 
-  return NextResponse.json({
-    results : processedTasks,
-    requestData
-  })
-  } catch(error){
-    console.log(error)
+      if (task.startTime > 1440 || task.endTime > 1440) {
+        task.startTime = requestData.startTime;
+        task.endTime = requestData.endTime;
+      }
+
+      return { ...task, date: newDate };
+    });
     return NextResponse.json({
-      error : error
-    })
+      results: processedTasks,
+      requestData,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      error: error,
+    });
   }
 }
 
-function generatePromptFromSchema(data : AIRequestData) : string {
-  const { title, description, numberOfDays, startTime, endTime, startDay, letAIDecideTime } = data;
+function generatePromptFromSchema(data: AIRequestData): string {
+  const {
+    title,
+    description,
+    numberOfDays,
+    startTime,
+    endTime,
+    startDay,
+    letAIDecideTime,
+  } = data;
 
   const startDate = new Date(startDay);
-  const formattedStartDate = startDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+  const formattedStartDate = startDate.toISOString().split("T")[0]; // Format to YYYY-MM-DD
 
   let timeSlotMessage = "";
   if (letAIDecideTime) {
@@ -90,9 +97,9 @@ function generatePromptFromSchema(data : AIRequestData) : string {
   return prompt;
 }
 
-function getResponseSchema(aiToDecideTime : boolean) : ResponseSchema {
-  if(!aiToDecideTime){
-    return ({
+function getResponseSchema(aiToDecideTime: boolean): ResponseSchema {
+  if (!aiToDecideTime) {
+    return {
       type: FunctionDeclarationSchemaType.ARRAY,
       items: {
         type: FunctionDeclarationSchemaType.OBJECT,
@@ -102,14 +109,13 @@ function getResponseSchema(aiToDecideTime : boolean) : ResponseSchema {
           },
           description: {
             type: FunctionDeclarationSchemaType.STRING,
-          }
+          },
         },
         required: ["title", "description"],
       },
-})
+    };
   } else {
-    return ({
-        
+    return {
       type: FunctionDeclarationSchemaType.ARRAY,
       items: {
         type: FunctionDeclarationSchemaType.OBJECT,
@@ -129,6 +135,6 @@ function getResponseSchema(aiToDecideTime : boolean) : ResponseSchema {
         },
         required: ["title", "description", "startTime", "endTime"],
       },
-})
+    };
   }
 }

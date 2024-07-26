@@ -61,7 +61,6 @@ function showNotification(task: Task) {
     });
   } else {
     Notification.requestPermission().then((perm) => {
-      console.log("notification request requested", perm);
       if (perm === "granted") {
         new Notification("Task Reminder", {
           body: `It's time to start: ${task.title}.`,
@@ -173,7 +172,6 @@ const TaskContextProvider = ({ children }: { children: ReactNode }) => {
           (task) => task.id === payload.id
         );
         if (taskToUpdate) {
-          console.log({ ...taskToUpdate, ...payload });
           const result = await updateTask({ ...taskToUpdate, ...payload });
           if (!result.isError) {
             const updatedTasksResult = await getAllUserTasks();

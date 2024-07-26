@@ -67,11 +67,9 @@ const TrackItAiPage = () => {
       if ((data as any).error) {
         setError(true);
       }
-      console.log(data);
       setLoading(false);
       setTasks(data.results);
     } catch (err) {
-      console.log(err);
       setError(true);
     }
   }
@@ -92,7 +90,6 @@ const TrackItAiPage = () => {
     });
     if (tasks) {
       for (let i = 0; i < tasks.length; i++) {
-        console.log("happening");
         await taskDispatch({
           type: "ADD_TASK",
           payload: {
@@ -106,7 +103,6 @@ const TrackItAiPage = () => {
             projectId: projectId || "none",
           },
         });
-        console.log("added to tasks");
       }
 
       if (projectId) {

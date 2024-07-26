@@ -50,7 +50,6 @@ const UpdateEventModal = ({
   for (let i = 0; i <= startTime; i += 15) {
     disabledEndTimeOptions.push(i);
   }
-  console.log(updateTaskData);
 
   async function updateTask(e: FormEvent) {
     e.preventDefault();
