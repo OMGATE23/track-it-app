@@ -279,3 +279,27 @@
 .footer-bg-backdrop {
   background-image: linear-gradient(to left bottom, #ffffff, #fafbff, #f3f7ff, #eaf4ff, #e0f2fe);
 }
+
+
+
+
+.premade-project-1:hover {
+  outline: 1px solid #1d4ed8;
+  background-color: #dbeafe;
+}
+
+.premade-project-2:hover {
+  outline: 1px solid #f87171;
+  background-color: #ffedd5;
+}
+
+.premade-project-3:hover {
+  outline: 1px solid #facc15;
+  background-color: #fef08a;
+}
+
+
+.premade-project-4:hover {
+  outline: 1px solid #15803d;
+  background-color: #a7f3d0;
+}
