@@ -21,13 +21,14 @@ const Sidebar = () => {
         >
           <Link href="/ai">Ask TrackAI</Link>
         </li>
-        <li className="sidebar-options">
+        <li
+          className={`sidebar-options ${sameRoute("/projects") && "current"}`}
+        >
           <Link href="/projects">Projects</Link>
         </li>
-        <li className={`sidebar-options ${sameRoute("/ai") && "current"}`}>
-          <Link href="/analytics">Analytics</Link>
-        </li>
-        <li className={`sidebar-options ${sameRoute("/ai") && "current"}`}>
+        <li
+          className={`sidebar-options ${sameRoute("/analytics") && "current"}`}
+        >
           <Link href="/analytics">Analytics</Link>
         </li>
       </ul>

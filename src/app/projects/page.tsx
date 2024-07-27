@@ -39,7 +39,7 @@ const App = () => {
       <Header />
       <div className="flex">
         <Sidebar />
-        <div className="flex flex-col items-center md:items-end gap-4 w-full px-16 py-8 mb-8">
+        <div className="flex flex-col items-center min-h-[100vh] md:items-end gap-4 w-full px-16 py-8 mb-8">
           {projectsState.projects.length > 0 && displayProject && (
             <div className="flex gap-4 justify-end">
               <button
@@ -51,7 +51,7 @@ const App = () => {
             </div>
           )}
           {projectsState.projects.length === 0 && (
-            <div className="flex flex-col items-center mt-12 gap-4">
+            <div className="flex flex-col items-center mt-12 gap-4 min-h-[100vh] w-[100%] ">
               <div className="text-center">
                 <p className="text-zinc-700 text-2xl font-bold">
                   Haven&apos;t started a project yet?

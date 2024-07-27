@@ -23,6 +23,9 @@ import {
   YAxis,
 } from "recharts";
 import { useDateContext } from "@/context/DateContext";
+import Delete from "../icons/Delete";
+import { useProjectsContext } from "@/context/ProjectContext";
+import { useRouter } from "next/navigation";
 
 interface Props {
   project: Resp_Project;
@@ -32,11 +35,12 @@ const ProjectInfo = ({ project }: Props) => {
   const { tasksState } = useTaskContext();
   const [showModal, setShowModal] = useState(false);
   const { state: dateState } = useDateContext();
-
+  const {projectsDispatch} = useProjectsContext()
   let taskData = countAndAvgTasksByDate(
     getDatesInSameWeek(dateState.displayDate),
     tasksState.tasks.filter((t) => t.projectId === project.id)
   );
+  const router = useRouter()
   return (
     <div className="flex flex-col md:flex-row gap-2 w-full mx-8">
       <div className="flex flex-col mx-auto items-center md:items-start gap-2  rounded-md md:ml-4 py-4 md:px-8">
@@ -49,6 +53,20 @@ const ProjectInfo = ({ project }: Props) => {
             className="flex items-center gap-1 text-sm outline outline-1 rounded-md py-0.5 px-2"
           >
             <EditIcon className="size-5" /> Edit
+          </button>
+          <button
+            onClick={() => {
+              projectsDispatch({
+                type : "DELETE_PROJECT",
+                payload : {
+                  id : project.id
+                }
+              })
+              router.push('/projects')
+            }}
+            className="flex items-center gap-1 text-sm outline outline-1 rounded-md py-0.5 px-2"
+          >
+            <Delete className="size-5" /> Delete
           </button>
         </div>
         <p className="text-zinc-800 text-lg max-w-[560px]">

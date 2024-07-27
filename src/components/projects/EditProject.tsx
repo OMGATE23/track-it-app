@@ -38,7 +38,7 @@ const EditProject = ({ setShow, project }: Props) => {
   }
   return (
     <div className="absolute w-[100vw] h-[100vh] top-0 left-0 bg-[rgba(0,0,0,0.01)] flex justify-center items-center">
-      <div className="px-8 md:px-16 py-12 w-[80%] md:w-[50%] min-h-[50%] rounded-md shadow-md bg-white">
+      <div className="px-8 md:px-16 py-12 w-[80%] z-[9999999] md:w-[50%] min-h-[50%] rounded-md shadow-md bg-white">
         <div className="flex flex-col gap-5">
           <label className="flex items-center text-lg gap-2">
             <input

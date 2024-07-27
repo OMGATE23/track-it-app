@@ -22,6 +22,7 @@ export async function POST(request: Request) {
     let startDay = new Date(requestData.startDay);
     let result = await model.generateContent(prompt);
     let tasks: Raw_AI_Task[] = JSON.parse(result.response.text());
+
     let processedTasks: P_AI_Task[] = tasks.map((task, i) => {
       const newDate = new Date(startDay);
       newDate.setDate(startDay.getDate() + i);
