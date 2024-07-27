@@ -18,6 +18,7 @@ import PrioritySelector from "@/components/projects/PrioritySelector";
 import Footer from "@/components/Footer";
 import useLogin from "@/hooks/useLogin";
 import LoginPrompt from "@/components/LoginPrompt";
+import ErrorHandler from "@/components/ai/ErrorHandler";
 
 const TrackItAiPage = () => {
   const { state } = useAuthContext();
@@ -53,7 +54,7 @@ const TrackItAiPage = () => {
     try {
       setError(false);
       setLoading(true);
-      const response = await fetch("/api/mock-api", {
+      const response = await fetch("/api/ai", {
         method: "POST",
         body: JSON.stringify({
           title: title,
@@ -230,7 +231,7 @@ const TrackItAiPage = () => {
               </div>
             </div>
           )}
-          {error && <p>Error occured. Try again later.</p>}
+          {error && <ErrorHandler/>}
         </div>
       </div>
       <Footer />
