@@ -11,6 +11,7 @@ import { Resp_Project } from "@/helpers/types";
 import ProjectInfo from "@/components/projects/ProjectInfo";
 import ProjectsTable from "@/components/projects/ProjectsTable";
 import Footer from "@/components/Footer";
+import LoginPrompt from "@/components/LoginPrompt";
 
 const App = () => {
   const { state } = useAuthContext();
@@ -30,9 +31,9 @@ const App = () => {
   if (!state.authIsReady) {
     return <></>;
   }
+
   if (!state.user) {
-    router.push("/");
-    return <></>;
+    return <LoginPrompt/>;
   }
   return (
     <div className="min-h-[100vh] h-[100dvh] ">

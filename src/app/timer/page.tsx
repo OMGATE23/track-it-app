@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import LoginPrompt from "@/components/LoginPrompt";
 
 const App = () => {
   const { state } = useAuthContext();
@@ -16,8 +17,7 @@ const App = () => {
   }
 
   if (!state.user) {
-    router.push("/");
-    return <></>;
+    return <LoginPrompt/>;
   }
   return (
     <div className="h-[100vh]">

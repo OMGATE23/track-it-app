@@ -6,6 +6,7 @@ import React from "react";
 import Sidebar from "@/components/Sidebar";
 import AnalyticsPage from "@/components/analytics/AnalyticsPage";
 import Footer from "@/components/Footer";
+import LoginPrompt from "@/components/LoginPrompt";
 
 const Analytics = () => {
   const { state } = useAuthContext();
@@ -16,8 +17,7 @@ const Analytics = () => {
   }
 
   if (!state.user) {
-    router.push("/");
-    return <></>;
+    return <LoginPrompt/>;
   }
   return (
     <div className="min-h-[100vh]">
