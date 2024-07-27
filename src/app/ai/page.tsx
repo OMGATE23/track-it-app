@@ -10,12 +10,13 @@ import { useDateContext } from "@/context/DateContext";
 import { AI_Tasks_Response, P_AI_Task, ProjectPriority } from "@/helpers/types";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { colourOptions, projectPriority } from "@/helpers/constansts";
 import { useTaskContext } from "@/context/TaskContext";
 import { useProjectsContext } from "@/context/ProjectContext";
 import PrioritySelector from "@/components/projects/PrioritySelector";
 import Footer from "@/components/Footer";
+import useLogin from "@/hooks/useLogin";
 
 const TrackItAiPage = () => {
   const { state } = useAuthContext();
@@ -34,16 +35,17 @@ const TrackItAiPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { taskDispatch } = useTaskContext();
   const { projectsDispatch, projectsState } = useProjectsContext();
+  const { login } = useLogin();
   const [priority, setPriority] = useState<ProjectPriority>(
     ProjectPriority.Low
   );
+
   if (!state.authIsReady) {
     return <></>;
   }
 
   if (!state.user) {
-    router.push("/");
-    return <></>;
+    return <button onClick={login}>Login</button>;
   }
 
   async function getAITasks() {
@@ -67,11 +69,9 @@ const TrackItAiPage = () => {
       if ((data as any).error) {
         setError(true);
       }
-      console.log(data);
       setLoading(false);
       setTasks(data.results);
     } catch (err) {
-      console.log(err);
       setError(true);
     }
   }
@@ -92,7 +92,6 @@ const TrackItAiPage = () => {
     });
     if (tasks) {
       for (let i = 0; i < tasks.length; i++) {
-        console.log("happening");
         await taskDispatch({
           type: "ADD_TASK",
           payload: {
@@ -106,7 +105,6 @@ const TrackItAiPage = () => {
             projectId: projectId || "none",
           },
         });
-        console.log("added to tasks");
       }
 
       if (projectId) {
@@ -120,9 +118,9 @@ const TrackItAiPage = () => {
   return (
     <div className="min-h-[100vh]">
       <Header />
-      <div className="flex h-full">
+      <div className="flex min-h-[100vh]">
         <Sidebar />
-        <div className="p-2 md:p-8 w-[90%] md:w-full mx-auto">
+        <div className="p-2 md:p-8 w-[90%] min-h-[100vh] md:w-full mx-auto">
           <h1 className="text-3xl text-zinc-800 font-semibold text-center md:text-left">
             Create a Schedule using TrackIt AI
           </h1>

@@ -1,4 +1,3 @@
-import useLogout from "@/hooks/useLogout";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -10,7 +9,7 @@ const Sidebar = () => {
     return pathname === route;
   }
   return (
-    <div className="h-[100%] md:min-w-[200px] hidden md:block z-[9999999999] bg-white   py-8 px-2 md:sticky top-16">
+    <div className="h-[100%] md:min-w-[200px] hidden md:block bg-white   py-8 px-2 md:sticky top-16">
       <ul className="flex flex-col items-center w-full md:items-start gap-4">
         <li className={`sidebar-options ${sameRoute("/timer") && "current"}`}>
           <Link href="/timer">Timer</Link>
@@ -22,13 +21,14 @@ const Sidebar = () => {
         >
           <Link href="/ai">Ask TrackAI</Link>
         </li>
-        <li className="sidebar-options">
+        <li
+          className={`sidebar-options ${sameRoute("/projects") && "current"}`}
+        >
           <Link href="/projects">Projects</Link>
         </li>
-        <li className={`sidebar-options ${sameRoute("/ai") && "current"}`}>
-          <Link href="/analytics">Analytics</Link>
-        </li>
-        <li className={`sidebar-options ${sameRoute("/ai") && "current"}`}>
+        <li
+          className={`sidebar-options ${sameRoute("/analytics") && "current"}`}
+        >
           <Link href="/analytics">Analytics</Link>
         </li>
       </ul>

@@ -9,8 +9,14 @@ import ProjectsContextProvider from "@/context/ProjectContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  icons: {
+    icon : {
+      url : '/assets/icons/calendar.svg'
+    }
+  },
   title: "TrackIt",
-  description: "Manage your tasks and track your progress",
+  description:
+    "TrackIt: Simplify project management with our AI-driven scheduler. Create clear, actionable plans effortlessly. Save time, reduce stress, and achieve your goals with TrackIt.",
 };
 
 export default function RootLayout({

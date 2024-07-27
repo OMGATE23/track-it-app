@@ -8,6 +8,7 @@ interface Props {
 const ProjectsTasksTimeline = ({ tasks }: Props) => {
   return (
     <div className={` w-fit mx-auto fade-in-pop h-fit`}>
+      <h2 className="text-xl font-[500]">Tasks:</h2>
       {tasks.map((task, i) => (
         <div
           key={i + "." + task.title}
@@ -20,7 +21,7 @@ const ProjectsTasksTimeline = ({ tasks }: Props) => {
             />
           </div>
           <div
-            className={`border-l border-zinc-600 max-w-[240px] md:max-w-[560px] py-6 px-4 md:w-[320px]`}
+            className={`border-l border-zinc-600 max-w-[240px] md:max-w-[560px] py-6 px-4 md:w-[240px]`}
           >
             <p className="text-lg">{task.title}</p>
             <p>{task.description}</p>

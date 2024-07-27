@@ -23,7 +23,6 @@ const TagsSelector = ({ selectedTags, setSelectedTags }: Props) => {
       setSelectedTags((prev) => [...prev, tag]);
     } else {
       setSelectedTags((prev) => {
-        console.log(tag, prev);
         return prev.filter((t) => tag.tag !== t.tag);
       });
     }

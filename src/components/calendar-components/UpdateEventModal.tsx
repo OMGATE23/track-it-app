@@ -50,7 +50,6 @@ const UpdateEventModal = ({
   for (let i = 0; i <= startTime; i += 15) {
     disabledEndTimeOptions.push(i);
   }
-  console.log(updateTaskData);
 
   async function updateTask(e: FormEvent) {
     e.preventDefault();
@@ -75,7 +74,7 @@ const UpdateEventModal = ({
     <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up w-[90%] md:w-[75%] min-h-[90%] relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
+        className="fade-up w-[90%] md:w-[75%] min-h-[90%] overflow-y-auto relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
       >
         <form
           onSubmit={(e) => e.preventDefault()}
