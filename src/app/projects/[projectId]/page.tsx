@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import LoginPrompt from "@/components/LoginPrompt";
 import ProjectInfo from "@/components/projects/ProjectInfo";
 import Sidebar from "@/components/Sidebar";
 import { useDateContext } from "@/context/DateContext";
@@ -23,10 +24,20 @@ const ProjectDetail = ({ params }: Props) => {
   const { projectsState } = useProjectsContext();
   const { tasksState } = useTaskContext();
   const [project, setProject] = useState<Resp_Project>();
+  const {state} = useAuthContext()
+  
 
   useEffect(() => {
     setProject(projectsState.projects.find((p) => p.id === params.projectId));
   }, [projectsState, params.projectId]);
+
+  if (!state.authIsReady) {
+    return <></>;
+  }
+
+  if (!state.user) {
+    return <LoginPrompt/>;
+  }
   return (
     <div className="w-[100vw] min-h-[100vh]">
       <Header />

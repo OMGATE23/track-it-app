@@ -17,6 +17,7 @@ import { useProjectsContext } from "@/context/ProjectContext";
 import PrioritySelector from "@/components/projects/PrioritySelector";
 import Footer from "@/components/Footer";
 import useLogin from "@/hooks/useLogin";
+import LoginPrompt from "@/components/LoginPrompt";
 
 const TrackItAiPage = () => {
   const { state } = useAuthContext();
@@ -45,7 +46,7 @@ const TrackItAiPage = () => {
   }
 
   if (!state.user) {
-    return <button onClick={login}>Login</button>;
+    return <LoginPrompt/>;
   }
 
   async function getAITasks() {
