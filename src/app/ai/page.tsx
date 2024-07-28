@@ -112,7 +112,7 @@ const TrackItAiPage = () => {
       if (projectId) {
         router.push(`/projects/${projectId}`);
       } else {
-        router.push("/timer");
+        router.push("/projects");
       }
     }
   }

@@ -27,10 +27,10 @@ export default function Home() {
             Try TrackIt AI
           </Link>
           <Link
-            href="/timer"
+            href="/calendar"
             className="block w-fit mt-4 bg-purple-600 fade-in-animation animation-delay-1200 text-white py-1.5 px-6 rounded-md"
           >
-            Go to timer
+            Go to Calendar
           </Link>
         </div>
         <div className="fade-in-animation mb-36 animation-delay-1200 relative w-[90%] md:w-[75%] md:mx-auto mt-8">
