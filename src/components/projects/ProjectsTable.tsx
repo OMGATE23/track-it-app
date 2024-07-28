@@ -19,12 +19,24 @@ const ProjectsTable = ({ projects }: Props) => {
       <table className="mx-auto w-full">
         <thead className="border-b rounded-md border-zinc-300">
           <tr>
-            <th className="py-1 font-normal text-zinc-800">Project Title</th>
-            <th className="py-1 font-normal text-zinc-800">Description</th>
-            <th className="py-1 font-normal text-zinc-800">Start Date</th>
-            <th className="py-1 font-normal text-zinc-800">Deadline</th>
-            <th className="py-1 font-normal text-zinc-800">Priority</th>
-            <th className="py-1 font-normal text-zinc-800">Status</th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[140px]">Project Title</p>
+            </th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[160px]">Description</p>
+            </th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[160px]">Start Date</p>
+            </th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[160px]">Deadline</p>
+            </th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[120px]">Priority</p>
+            </th>
+            <th className="py-1 font-normal text-zinc-800">
+              <p className="w-[120px]">Status</p>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -36,23 +48,19 @@ const ProjectsTable = ({ projects }: Props) => {
                 router.push(`/projects/${project.id}`);
               }}
             >
-              <td className=" py-2 text-center font-[500]">
+              <td className="py-2 text-center font-[500]">
                 {project.title || "(No Title)"}
               </td>
-              <td className=" py-2 text-ellipsis max-w-[120px] overflow-x-hidden">
-                {project.description}
+              <td className="py-2 text-ellipsis max-w-[120px] overflow-x-hidden">
+                {project.description || "(no description)"}
               </td>
-              <td className=" py-2 text-center">
+              <td className="py-2 text-center">
                 {monthDayYearFormatDate(project.startDate)}
               </td>
-              <td className=" py-2 text-center">
+              <td className="py-2 text-center">
                 {monthDayYearFormatDate(project.deadline)}
               </td>
-              <td
-                className={`
-                py-2 text-center mx-auto
-              `}
-              >
+              <td className="py-2 text-center mx-auto">
                 <span
                   className={`${priorityStyling(
                     project.priority
@@ -61,11 +69,7 @@ const ProjectsTable = ({ projects }: Props) => {
                   {project.priority}
                 </span>
               </td>
-              <td
-                className={`
-                py-2 text-center mx-auto
-              `}
-              >
+              <td className="py-2 text-center mx-auto">
                 <span
                   className={`${statusStyling(
                     project.status
