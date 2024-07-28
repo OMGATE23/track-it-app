@@ -9,7 +9,7 @@ export default function useLogin() {
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const { dispatch } = useAuthContext();
-  const router = useRouter()
+  const router = useRouter();
 
   const login = async () => {
     setIsPending(true);
@@ -25,7 +25,7 @@ export default function useLogin() {
         setIsPending(false);
         setError(null);
       }
-      router.push('/timer')
+      router.push("/calendar");
     } catch (err: any) {
       console.error(err);
       if (!isCancelled) {

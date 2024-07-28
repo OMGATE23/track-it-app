@@ -11,8 +11,8 @@ const Sidebar = () => {
   return (
     <div className="h-[100%] md:min-w-[200px] hidden md:block bg-white   py-8 px-2 md:sticky top-16">
       <ul className="flex flex-col items-center w-full md:items-start gap-4">
-        <li className={`sidebar-options ${sameRoute("/timer") && "current"}`}>
-          <Link href="/timer">Timer</Link>
+        <li className={`sidebar-options ${sameRoute("/calendar") && "current"}`}>
+          <Link href="/calendar">Calendar</Link>
         </li>
         <li
           className={`sidebar-options ${

@@ -52,7 +52,7 @@ const AIPageLoader = () => {
   return (
     <div className='text-center flex flex-col items-center gap-2'>
       <p className='text-xl font-semibold text-zinc-900'>Loading...</p>
-      <div className={`quote text-lg ${fadeIn ? 'fade-in' : 'fade-out'} ${colors[currentQuoteIndex]}`}>
+      <div className={`quote text-lg animate-pulse ${fadeIn ? 'fade-in' : 'fade-out'} ${colors[currentQuoteIndex]}`}>
         <p className='font-[300]'>{quotes[currentQuoteIndex]}</p>
       </div>
     </div>

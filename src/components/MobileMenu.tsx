@@ -13,8 +13,8 @@ const MobileMenu = () => {
   return (
     <div className="h-[100vh] w-full md:min-w-[200px] absolute left-0 md:block z-[99999999999] bg-white py-8 md:sticky top-16">
       <ul className="flex flex-col items-center w-full md:items-start gap-4">
-        <li className={`sidebar-options ${sameRoute("/timer") && "current"}`}>
-          <Link href="/timer">Timer</Link>
+        <li className={`sidebar-options ${sameRoute("/calendar") && "current"}`}>
+          <Link href="/calendar">Calendar</Link>
         </li>
         <li
           className={`sidebar-options ${
