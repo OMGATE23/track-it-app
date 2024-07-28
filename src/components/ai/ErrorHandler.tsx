@@ -48,7 +48,10 @@ const ErrorHandler = () => {
             date: new Date(tasks[i].date),
             startTime: tasks[i].startTime,
             endTime: tasks[i].endTime,
-            tags: [],
+            tags: [{
+              type: "status",
+              tag: "To-Do"
+            }],
             colour: colourOptions[0],
             projectId: projectId || "none",
           },

@@ -28,7 +28,7 @@ const StatusSelector = ({status , setStatus} : Props) => {
   return (
     <div ref={componentRef} className='relative w-fit flex items-start gap-2'>
       <div className='flex items-center gap-4 '>
-        Priority: 
+        Status: 
       <button type='button' onClick={(e) => {
         e.preventDefault()
         setOpenTagsDisplay(prev => !prev)
