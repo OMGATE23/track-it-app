@@ -2,11 +2,13 @@ import React, { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { CreateTaskType } from "./week-components/WeekGrid";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
-import { colourOptions } from "@/helpers/constansts";
+import { colourOptions, TAGS } from "@/helpers/constansts";
 import DatePicker from "./DatePicker";
 import TagsSelector from "./TagsSelector";
 import { Tag } from "@/helpers/types";
 import ProjectSelector from "../projects/ProjectSelector";
+import PrioritySelector from "./PrioritySelector";
+import StatusSelector from "./StatusSelector";
 type CreateEventModalType = {
   setShowCreateTask: React.Dispatch<React.SetStateAction<boolean>>;
   createTaskData: CreateTaskType;
@@ -31,6 +33,8 @@ const CreateEventModal = ({
     createTaskData.taskDate.toISOString().split("T")[0]
   );
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([]);
+  const [priority, setPriority] = useState<Tag>(TAGS.priority[0]);
+  const [status, setStatus] = useState<Tag>(TAGS.status[0]);
   const [taskColour, setTaskColour] = useState(colourOptions[0]);
   const { taskDispatch } = useTaskContext();
   const [projectId, setProjectId] = useState<string>("");
@@ -105,6 +109,8 @@ const CreateEventModal = ({
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
           />
+          <PrioritySelector priority={priority} setPriority={setPriority} />
+          <StatusSelector status={status} setStatus={setStatus} />
           <div className="flex items-start md:items-center justify-items-center gap-4">
             <p>Color:</p>
             <div className="grid md:flex grid-cols-4 gap-4 md:items-center">
@@ -158,6 +164,7 @@ const CreateEventModal = ({
               disabled={!taskInfo.title}
               onClick={(e) => {
                 e.preventDefault();
+
                 taskDispatch({
                   type: "ADD_TASK",
                   payload: {
@@ -167,7 +174,11 @@ const CreateEventModal = ({
                     endTime,
                     date: new Date(taskDate),
                     colour: taskColour,
-                    tags: selectedTags.map(({ tag, type }) => ({ tag, type })),
+                    tags: [
+                      ...selectedTags.map(({ tag, type }) => ({ tag, type })),
+                      { tag: priority.tag, type: priority.type },
+                      { tag: status.tag, type: status.type },
+                    ],
                     projectId: projectId,
                   },
                 });

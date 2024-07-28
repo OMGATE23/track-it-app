@@ -278,7 +278,7 @@ export const TAGS: Record<(typeof TAG_TYPES)[number], Tag[]> = {
       outline: "outline-black",
     },
   ],
-};
+} as const;
 
 export const TAG_TYPES: string[] = [
   "task",

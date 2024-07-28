@@ -75,6 +75,15 @@ export function getProcessedTags(tags: Resp_Tag[] = []): Tag[] {
   return processedTags;
 }
 
+export function getProcessedSingleTag(
+  tag: Resp_Tag | undefined
+): Tag | undefined {
+  if (!tag) {
+    return tag;
+  }
+  return TAGS[tag.type]?.find((findTag) => findTag.tag === tag.tag);
+}
+
 export function priorityStyling(priority: ProjectPriority): string {
   if (priority === ProjectPriority.High) {
     return "bg-red-500";
