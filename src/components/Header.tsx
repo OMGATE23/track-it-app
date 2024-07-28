@@ -22,7 +22,7 @@ const Header = () => {
     return <div className="h-16" />;
   }
   return user ? (
-    <header className=" fade-in-animation  h-16 md:w-full flex items-center justify-between p-4 sticky top-0 w-[100dvw] z-[99999999]">
+    <header className=" fade-in-animation  h-16 md:w-full flex items-center justify-between p-4 sticky top-0 w-[100dvw] z-[9999] md:z-[99999999]">
       <h1 className="text-xl font-semibold">TrackIt</h1>
       <div className="flex items-center gap-4">
         {askPermission && (
