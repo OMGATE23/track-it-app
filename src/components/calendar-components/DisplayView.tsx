@@ -2,12 +2,10 @@
 import React from "react";
 import WeekGrid from "./week-components/WeekGrid";
 import DatePicker from "./DatePicker";
-import TaskTimer from "./TaskTimer";
 
 const DisplayView = () => {
   return (
     <main className="relative h-[90vh]  overflow-hidden flex flex-col items-center md:items-start justify-stretch p-4 gap-4">
-      <TaskTimer />
       <div className="flex relative flex-col gap-8 justify-center items-center">
         <DatePicker />
       </div>
