@@ -26,7 +26,13 @@ const Header = () => {
       <h1 className="text-xl font-semibold">TrackIt</h1>
       <div className="flex items-center gap-4">
         {askPermission && (
-          <button
+          <div className=" hidden md:flex py-1 px-3 rounded-md bg-blue-400 shadow-sm gap-4 items-center">
+            <button
+              onClick={() => setAskPermission(false)}
+            >
+              <Close/>
+            </button>
+            <button
             onClick={() => {
               if (Notification) {
                 Notification.requestPermission().then((perm) => {
@@ -34,10 +40,11 @@ const Header = () => {
                 });
               }
             }}
-            className="shadow-sm animate-pulse py-1 px-3 rounded-md bg-blue-400"
+            className=" animate-pulse "
           >
             Allow Notifications
           </button>
+          </div>
         )}
         <button
           className="hidden md:block hover:bg-zinc-100 transition-all duration-75 px-2 py-1 rounded-md text-sm"
