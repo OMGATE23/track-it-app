@@ -40,7 +40,7 @@ export default function Home() {
               <div className="size-2 bg-yellow-300 rounded-full"></div>
               <div className="size-2 bg-green-500 rounded-full"></div>
             </div>
-            <img src="assets/images/timer.png" />
+            <img src="assets/images/calendar.png" />
           </div>
           <div className="w-[20%] absolute top-[30%] left-[80%] p-2 bg-white outline outline-1 outline-zinc-200 rounded-md shadow-lg">
             <img className="rounded-md" src="assets/images/ai-project.png" />
@@ -90,7 +90,7 @@ export default function Home() {
               </p>
             </div>
             <div className="w-[80%] md:w-[45%] shadow-sm outline outline-1 outline-zinc-200 rounded-md">
-              <img src="assets/images/timer.png" />
+              <img src="assets/images/calendar.png" />
             </div>
           </div>
           <div className="flex justify-center flex-col md:flex-row items-center gap-4">
