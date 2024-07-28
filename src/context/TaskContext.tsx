@@ -53,7 +53,6 @@ function scheduleNotifications(tasks: Task[]) {
 }
 
 function showNotification(task: Task) {
-  alert(`Task "${task.title}" scheduled from ${numberToTime(task.startTime)}`);
   if (Notification.permission === "granted") {
     new Notification("Task Reminder", {
       body: `It's time to start: ${task.title}!`,
