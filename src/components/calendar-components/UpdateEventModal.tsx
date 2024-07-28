@@ -1,11 +1,13 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import DropdownTime from "./DropdownTime";
 import { useTaskContext } from "@/context/TaskContext";
-import { colourOptions } from "@/helpers/constansts";
+import { colourOptions, TAGS } from "@/helpers/constansts";
 import { Tag, Task } from "@/helpers/types";
 import TagsSelector from "./TagsSelector";
-import { getProcessedTags } from "@/helpers/helper";
+import { getProcessedSingleTag, getProcessedTags } from "@/helpers/helper";
 import ProjectSelector from "../projects/ProjectSelector";
+import PrioritySelector from "./PrioritySelector";
+import StatusSelector from "./StatusSelector";
 type UpdateEventModalType = {
   setShowUpdateTask: React.Dispatch<React.SetStateAction<boolean>>;
   updateTaskData: Task;
@@ -24,14 +26,28 @@ const UpdateEventModal = ({
     title: updateTaskData.title,
     description: updateTaskData.description as string,
   });
+  const [priority, setPriority] = useState<Tag>(
+    getProcessedSingleTag(
+      updateTaskData.tags.find((t) => t.type === "priority")
+    ) || TAGS.priority[0]
+  );
+  const [status, setStatus] = useState<Tag>(
+    getProcessedSingleTag(
+      updateTaskData.tags.find((t) => t.type === "status")
+    ) || TAGS.status[0]
+  );
   const [startTime, setStartTime] = useState(updateTaskData.startTime);
-  const [endTime, setEndTime] = useState(updateTaskData.startTime + 60);
+  const [endTime, setEndTime] = useState(updateTaskData.endTime);
   const [taskDate, setTaskDate] = useState(
     updateTaskData.date.toISOString().split("T")[0]
   );
   const [taskColour, setTaskColour] = useState(updateTaskData.colour);
   const [selectedTasks, setSelectedTags] = useState<Array<Tag>>(
-    getProcessedTags(updateTaskData.tags)
+    getProcessedTags(
+      updateTaskData.tags.filter(
+        (tag) => tag.type !== "priority" && tag.type !== "status"
+      )
+    )
   );
   const [projectId, setProjectId] = useState<string>(updateTaskData.projectId);
   const { taskDispatch } = useTaskContext();
@@ -63,7 +79,11 @@ const UpdateEventModal = ({
         date: new Date(taskDate),
         colour: taskColour,
         id: updateTaskData.id,
-        tags: selectedTasks.map(({ tag, type }) => ({ tag, type })),
+        tags: [
+          ...selectedTasks.map(({ tag, type }) => ({ tag, type })),
+          { tag: priority.tag, type: priority.type },
+          { tag: status.tag, type: status.type },
+        ],
         projectId: projectId,
       },
     });
@@ -74,7 +94,7 @@ const UpdateEventModal = ({
     <div className="fixed top-0 left-0 z-[999999] w-[100%] h-[100vh] bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
       <div
         id="modal"
-        className="fade-up w-[90%] md:w-[75%] min-h-[90%] overflow-y-auto relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
+        className="fade-up w-[90%] md:w-[75%] h-[90%] overflow-y-auto relative min-w-[360px] z-[9999999] bg-white rounded-lg shadow-xl outline outline-1 outline-zinc-100 py-8 px-2 md:px-8"
       >
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -125,6 +145,8 @@ const UpdateEventModal = ({
             selectedTags={selectedTasks}
             setSelectedTags={setSelectedTags}
           />
+          <PrioritySelector priority={priority} setPriority={setPriority} />
+          <StatusSelector status={status} setStatus={setStatus} />
           <ProjectSelector projectId={projectId} setProjectId={setProjectId} />
           <div className="flex w-full md:items-center gap-4">
             Color:
